@@ -1,0 +1,18 @@
+﻿<custom:ThreadedPage x:Class="ReorderWPF.Pages.SupplierDashboard"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ReorderWPF.Pages"
+      xmlns:custom="clr-namespace:ReorderWPF.CustomControls"
+      mc:Ignorable="d" 
+      d:DesignHeight="608.125" d:DesignWidth="887.5"
+      Title="SupplierDashboard" Template="{DynamicResource ThreadedPageTemplate}">
+
+    <Grid>
+        <ScrollViewer HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <StackPanel x:Name="SupplierStackPanel" VerticalAlignment="Top" MinHeight="50"/>
+        </ScrollViewer>
+
+    </Grid>
+</custom:ThreadedPage>

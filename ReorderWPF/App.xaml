@@ -1,9 +1,35 @@
 ﻿<Application x:Class="ReorderWPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ReorderWPF"
+             xmlns:local="clr-namespace:ReorderWPF.CustomControls"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="{x:Type local:ThreadedPage}">
+            <Setter Property="Template" Value="{DynamicResource ThreadedPageTemplate}"/>
+        </Style>
+        <ControlTemplate x:Key="ThreadedPageTemplate" TargetType="{x:Type local:ThreadedPage}">
+            <Grid x:Name="TemplateRoot">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <DockPanel LastChildFill="False" Margin="0" Grid.Row="1" VerticalAlignment="Bottom">
+                    <Border BorderBrush="#FF898989" Background="#FFDEDEDE" BorderThickness="1" DockPanel.Dock="Bottom">
+                        <Grid VerticalAlignment="Bottom">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StatusBar VerticalAlignment="Bottom" BorderBrush="#FF898989" Background="#FFDEDEDE" BorderThickness="0,0,1,0">
+                                <TextBlock x:Name="StatusBlock" Text="Status"/>
+                            </StatusBar>
+                            <TextBlock x:Name="ClockBlock" Text="00:00:00" Margin="5,0" Grid.Column="1" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                </DockPanel>
+                <ContentPresenter x:Name="InheritedContentPresenter" Margin="4" Grid.Row="0"/>
+            </Grid>
+        </ControlTemplate>
     </Application.Resources>
 </Application>

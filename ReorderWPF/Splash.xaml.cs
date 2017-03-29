@@ -51,11 +51,15 @@ namespace ReorderWPF
             LoadAssemblies(this.GetType().Assembly);
             GenericDataController loader = new GenericDataController();
             Worker.ReportProgress(0, "Loading Item Data");
-            HomeRef.Data_Skus = loader.SmartSkuCollLoad();
+            //HomeRef.Data_Skus = loader.SmartSkuCollLoad();
             Worker.ReportProgress(0, "Loading Employee Data");
             HomeRef.Data_Employees = new EmployeeCollection();
+            Worker.ReportProgress(0, "Loading Supplier Collection");
+            HomeRef.SupplierCollection = new SupplierCollection();
+            Thread.Sleep(20);
             Worker.ReportProgress(0, "Preparing Authentication");
             HomeRef.User_Employee = new AuthClass();
+
 
         }
 
@@ -72,8 +76,20 @@ namespace ReorderWPF
         internal void ProxyFinished(object sender, RunWorkerCompletedEventArgs e)
         {
             UpdateText("Requesting User Login");
-            UpdateText("Logged in: " + HomeRef.User_Employee.AuthenticatedUser.FullName);
-            this.Close();
+            try
+            {
+                UpdateText("Logged in: " + HomeRef.User_Employee.AuthenticatedUser.FullName);
+            }
+            catch (NullReferenceException)
+            {
+                HomeRef.User_Employee = new AuthClass();
+                UpdateText("Logged in: " + HomeRef.User_Employee.AuthenticatedUser.FullName);
+            }
+            finally
+            {
+                this.Close();
+            }
+            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
