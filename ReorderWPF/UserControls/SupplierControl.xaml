@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ReorderWPF.UserControls"
-             mc:Ignorable="d">
-    <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Background="White">
+             mc:Ignorable="d" Padding="2" d:DesignWidth="384.334" d:DesignHeight="96.667">
+    <Border BorderBrush="Black" BorderThickness="1">
+    <Grid VerticalAlignment="Top" Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition/>
@@ -34,4 +35,5 @@
         </Grid>
         <TextBlock x:Name="FullSupplierName" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Dina International" VerticalAlignment="Center" FontSize="18"/>
     </Grid>
+    </Border>
 </UserControl>

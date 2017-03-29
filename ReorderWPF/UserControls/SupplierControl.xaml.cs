@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using WHLClasses;
 namespace ReorderWPF.UserControls
 {
     /// <summary>
@@ -20,6 +20,8 @@ namespace ReorderWPF.UserControls
     /// </summary>
     public partial class SupplierControl : UserControl
     {
+        public string SupplierCodeInternal = "";
+        internal Supplier SupplierInternal;
         public SupplierControl()
         {
             InitializeComponent();

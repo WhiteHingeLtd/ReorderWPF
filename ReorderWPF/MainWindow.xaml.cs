@@ -4,6 +4,8 @@ using System.Collections;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Media;
 using WHLClasses;
 using ReorderWPF.CustomControls;
 using ReorderWPF;
@@ -25,32 +27,32 @@ namespace ReorderWPF
         {
             InitializeComponent();
         }
-       
+
+        private void UpdateShellColor(object sender, PropertyChangedEventArgs e)
+        {
+            byte R = Convert.ToByte((Convert.ToInt32(SystemParameters.WindowGlassColor.R) + 510)/3);
+            byte G = Convert.ToByte((Convert.ToInt32(SystemParameters.WindowGlassColor.G) + 510) / 3);
+            byte B = Convert.ToByte((Convert.ToInt32(SystemParameters.WindowGlassColor.B) + 510) / 3);
+            SolidColorBrush BackgroundBrush = new SolidColorBrush(Color.FromRgb(R, G, B));
+            MainRibbon.Background = BackgroundBrush;
+        }
+
+
         private void Window_Initialized(object sender, EventArgs e)
         {
             var Splash = new Splash();
             Splash.HomeRef = this;
             Splash.InitializeComponent();
             Splash.ShowDialog();
-            //SupplierStackPanel.Visibility = Visibility.Visible;
-            foreach (Supplier Supp in SupplierCollection)
-            {
-                var suppcount = MSSQLPublic.SelectData("SELECT COUNT(*) FROM whldata.sku_supplierdata WHERE SupplierName ='" + Supp.Code + "';") as ArrayList;
-                var DiscontCount = MSSQLPublic.SelectData("SELECT COUNT(*) FROM whldata.sku_supplierdata WHERE SupplierName ='" + Supp.Code + "' AND isDiscontinued='True' ;") as ArrayList;
-                var refcontrol = new SupplierControl();
-                refcontrol.FullSupplierName.Text = Supp.Name;
-                refcontrol.SupplierCode.Text = Supp.Code;
-                refcontrol.TotalLines.Text = ((suppcount[0]) as ArrayList)[0].ToString();
-                refcontrol.Discontinued.Text = ((DiscontCount[0]) as ArrayList)[0].ToString();
-               // SupplierStackPanel.Children.Add(refcontrol);
 
-            }
         }
         private void Window_Loaded(object sender, EventArgs e)
         {
-            NewTab(new SupplierDashboard(SupplierCollection));
+            NewTab(new SupplierDashboard(this,SupplierCollection));
+            UpdateShellColor(null, null);
+            SystemParameters.StaticPropertyChanged += UpdateShellColor;
         }
-        private void NewTab(ThreadedPage Control)
+        public void NewTab(ThreadedPage Control)
         {
             PageFrameTab Tab = new PageFrameTab(Control);
             if (Control.SupportsMultipleTabs())

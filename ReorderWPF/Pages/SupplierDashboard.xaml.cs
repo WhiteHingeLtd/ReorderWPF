@@ -1,20 +1,7 @@
 ﻿using ReorderWPF.CustomControls;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ReorderWPF.UserControls;
 using WHLClasses;
 
@@ -25,10 +12,10 @@ namespace ReorderWPF.Pages
     /// </summary>
     public partial class SupplierDashboard : ThreadedPage
     {
-        public SupplierDashboard(SupplierCollection supps)
+        public SupplierDashboard(MainWindow Main, SupplierCollection supps)
         {
             InitializeComponent();
-
+            SetMainWindowRef(Main);
             foreach (Supplier Supp in supps)
             {
                 var refcontrol = new SupplierControl();
@@ -40,6 +27,10 @@ namespace ReorderWPF.Pages
                     refcontrol.SupplierCode.Text = Supp.Code;
                     refcontrol.TotalLines.Text = (suppcount[0] as ArrayList)[0].ToString();
                     refcontrol.Discontinued.Text = (DiscontCount[0] as ArrayList)[0].ToString();
+                    refcontrol.SupplierCodeInternal = Supp.Code;
+                    refcontrol.SupplierInternal = Supp;
+                    refcontrol.MouseUp += Refcontrol_MouseUp;
+                    refcontrol.TouchUp += Refcontrol_TouchUp;
                 }
                 catch (InvalidCastException)
                 {
@@ -57,19 +48,33 @@ namespace ReorderWPF.Pages
 
             }
         }
+
+        private void Refcontrol_TouchUp(object sender, System.Windows.Input.TouchEventArgs e)
+        {
+            var Ctrl = sender as SupplierControl;
+            CreateNewTab(Ctrl);
+
+        }
+
+        private void Refcontrol_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var Ctrl = sender as SupplierControl;
+            CreateNewTab(Ctrl);
+        }
+
         internal override void TabClosing(ref bool cancel)
         {
-            MessageBoxResult asd = MessageBox.Show("asd","asd",MessageBoxButton.YesNo);
+            MessageBoxResult asd = MessageBox.Show("Are you sure","Close Application",MessageBoxButton.YesNo);
             if (asd == MessageBoxResult.Yes)
             {
-                MessageBox.Show("cancelled");
                 cancel = true;
             }
-            else
-            {
-                MessageBox.Show("not cancelled, app is rip");
-            }
         
+        }
+
+        private void CreateNewTab(SupplierControl sender)
+        {
+            MainWindowRef.NewTab(new SupplierData(MainWindowRef, sender.SupplierInternal));
         }
     }
 }

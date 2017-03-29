@@ -27,15 +27,12 @@
                         <StackPanel />
                     </RibbonApplicationMenu.AuxiliaryPaneContent>
                     <RibbonApplicationMenu.FooterPaneContent>
-                        <TextBlock Text="Warehouse Manager | Version asd"></TextBlock>
+                        <TextBlock Text="Reorder Assistant | Version 0.0.1"></TextBlock>
                     </RibbonApplicationMenu.FooterPaneContent>
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="Home">
-                <RibbonGroup Header="Tools" Margin="0,1">
-                    <RibbonButton x:Name="RoutePlannerButton" Label="Route Planner"/>
-
-                </RibbonGroup>
+                <RibbonGroup Header="Tools" Margin="0,1"/>
             </RibbonTab>
             <RibbonTab x:Name="WarehouseTab" Header="Warehouse" Visibility="Hidden">
                 <RibbonGroup Header="Group">

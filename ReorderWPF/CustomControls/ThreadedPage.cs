@@ -22,15 +22,22 @@ namespace ReorderWPF.CustomControls
 
         internal DispatcherTimer Timer;
         internal BackgroundWorker Worker;
+        internal MainWindow MainWindowRef;
+        
         TextBlock Status;
         TextBlock ClockBlock;
 
         internal ThreadedPage()
         {
-
+            
             // Add any initialization after the InitializeComponent() call.
             Timer = new DispatcherTimer(new TimeSpan(0, 0, 0, 1), DispatcherPriority.Normal, TimerTick, base.Dispatcher);
             SetUpWorker();
+        }
+
+        internal void SetMainWindowRef(MainWindow main)
+        {
+            MainWindowRef = main;
         }
 
         private void SetUpWorker()
