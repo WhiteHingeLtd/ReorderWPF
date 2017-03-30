@@ -33,7 +33,7 @@
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="Home">
                 <RibbonGroup Header="Tools" Margin="0,1" Width="81">
-                    <RibbonButton Content="RibbonButton" Margin="0,0,-49,-23" RenderTransformOrigin="0.405,0.475" Click="RibbonButton_Click" LargeImageSource="splash.png" SmallImageSource="splash.png" Height="Auto"/>
+                    <RibbonButton Content="RibbonButton" Margin="0,0,-49,-23" RenderTransformOrigin="0.405,0.475" Click="RibbonButton_Click" LargeImageSource="splash.png" SmallImageSource="splash.png" Height="Auto" Label="Sales Charts"/>
                 </RibbonGroup>
             </RibbonTab>
             <RibbonTab x:Name="WarehouseTab" Header="Warehouse" Visibility="Hidden">

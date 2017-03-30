@@ -189,7 +189,7 @@ namespace ReorderWPF.Pages
                     SalesAreaSeries.Points2.AddRange(StockHistoryPoints2);
                     //StockAreaSeries.ConstantY2 = 0;
                     SalesAreaSeries.Title = "Sales History Area";
-
+                    
                     
                     PlotArea.Series.Add(StockAreaSeries);
                     PlotArea.Series.Add(SalesAreaSeries);
@@ -221,7 +221,7 @@ namespace ReorderWPF.Pages
 
                 
                 //MessageBox.Show(QueryDict.Count.ToString());
-
+                PlotArea.Title = Sku.ShortSku + " Sales/Stock History";
                 PlotGlobal = PlotArea;
             }
         }
