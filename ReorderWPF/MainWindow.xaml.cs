@@ -119,5 +119,10 @@ namespace ReorderWPF
             }
             e.Cancel = fuck;
         }
+
+        private void RibbonButton_Click(object sender, RoutedEventArgs e)
+        {
+            NewTab(new ItemChart(this));
+        }
     }
 }

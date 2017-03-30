@@ -5,24 +5,28 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ReorderWPF.Pages"
       xmlns:custom="clr-namespace:ReorderWPF.CustomControls"
+                     
       xmlns:oxy="http://oxyplot.org/wpf"
       mc:Ignorable="d" 
       Template="{DynamicResource ThreadedPageTemplate}"
       
-      Title="ItemChart" Height="624.702" Width="715.061">
+      Title="Item Chart" Height="698.702" Width="919.061">
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="91*"/>
             <RowDefinition Height="267*"/>
-            <RowDefinition Height="236*"/>
+            <RowDefinition Height="89*"/>
+            <RowDefinition Height="146*"/>
         </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Left" Height="267" Grid.Row="1" VerticalAlignment="Top" Width="707">
-            <oxy:Plot Name="PlotArea">
-                <oxy:Plot.Series>
-                    <oxy:AreaSeries></oxy:AreaSeries>
-                </oxy:Plot.Series>
-            </oxy:Plot>
+        <Grid Grid.Row="1">
+            <oxy:PlotView Name="PlotPlot">
+
+            </oxy:PlotView>
         </Grid>
+        <TextBox x:Name="SkuBox" HorizontalAlignment="Left" Height="28" Margin="10,10,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" KeyDown="SkuBox_KeyDown"/>
+        <Button x:Name="LoadGraphButton" Content="Load Graph" HorizontalAlignment="Left" Margin="210,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="96" Height="28" Click="LoadGraphButton_Click"/>
+        <CheckBox x:Name="UseAreaCheck" Content="CheckBox" HorizontalAlignment="Left" Margin="311,10,0,0" Grid.Row="3" VerticalAlignment="Top" Height="28" Width="19"/>
+        <TextBlock x:Name="ItemTitle" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18"/>
     </Grid>
 </custom:ThreadedPage>

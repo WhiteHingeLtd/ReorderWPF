@@ -83,6 +83,7 @@
     <Compile Include="Pages\ItemChart.xaml.cs">
       <DependentUpon>ItemChart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ItemChartActual.cs" />
     <Compile Include="Pages\SupplierDashboard.xaml.cs">
       <DependentUpon>SupplierDashboard.xaml</DependentUpon>
     </Compile>
