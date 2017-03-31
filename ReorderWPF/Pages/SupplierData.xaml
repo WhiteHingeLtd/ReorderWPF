@@ -13,11 +13,10 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="167*"/>
-            <RowDefinition Height="303*"/>
-            <RowDefinition Height="166*"/>
+            <RowDefinition Height="181"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid x:Name="SupplierDetailsGrid" HorizontalAlignment="Left" Width="944">
+        <Grid x:Name="SupplierDetailsGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="167*"/>
                 <ColumnDefinition Width="594*"/>
@@ -39,10 +38,24 @@
                 <TextBlock x:Name="GrossCurrentOrder" HorizontalAlignment="Left" Margin="10,104,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Gross: £15000" VerticalAlignment="Top" FontSize="14"/>
             </Grid>
             <Grid>
-                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Options" VerticalAlignment="Top" FontStyle="Italic" FontSize="18"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="79*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Options" VerticalAlignment="Top" FontStyle="Italic" FontSize="18" Grid.Column="1" Margin="48,0"/>
+                <CheckBox x:Name="LowStockCheck" Content="Low Stock" HorizontalAlignment="Left" Margin="0,29,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                <CheckBox x:Name="SupplierLowCheck" Content="Supplier Low" Grid.Column="1" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top"/>
+                <CheckBox x:Name="DiscontCheck" Content="Discontinued" Grid.Column="1" HorizontalAlignment="Left" Margin="0,69,0,0" VerticalAlignment="Top"/>
+                <CheckBox x:Name="UnlistedCheck" Content="New (Unlisted)" Grid.Column="1" HorizontalAlignment="Left" Margin="0,89,0,0" VerticalAlignment="Top"/>
+                <CheckBox x:Name="NoSalesCheck" Content="No Sales" Grid.Column="1" HorizontalAlignment="Left" Margin="0,109,0,0" VerticalAlignment="Top"/>
+                <Button x:Name="RefreshButton" Content="Refresh Items" Grid.Column="1" HorizontalAlignment="Center" Margin="34,160,48,0" Click="RefreshButton_Click" VerticalAlignment="Bottom"/>
+                <CheckBox x:Name="PrimaryOnlyCheck" Content="Primary Only" Grid.Column="1" HorizontalAlignment="Left" Margin="0,129,0,0" VerticalAlignment="Top"/>
             </Grid>
         </Grid>
-        <DataGrid x:Name="SupplierDataGrid" Grid.Row="1" CanUserReorderColumns="False">
+        <DataGrid x:Name="SupplierDataGrid" Grid.Row="1" CanUserReorderColumns="False" Margin="0,10">
         </DataGrid>
     </Grid>
 </custom:ThreadedPage>

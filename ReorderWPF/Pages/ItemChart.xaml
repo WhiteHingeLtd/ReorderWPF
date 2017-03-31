@@ -10,7 +10,7 @@
       mc:Ignorable="d" 
       Template="{DynamicResource ThreadedPageTemplate}"
       
-      Title="Item Chart" Height="698.702" Width="919.061">
+      Title="Item Chart" MinWidth="800" MinHeight="600">
 
     <Grid>
         <Grid.RowDefinitions>

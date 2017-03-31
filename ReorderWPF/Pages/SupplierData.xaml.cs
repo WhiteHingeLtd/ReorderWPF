@@ -17,6 +17,12 @@ namespace ReorderWPF.Pages
         private SkuCollection _supplierSkuCollectionfull = new SkuCollection(true);
         private SkuCollection _supplierSkuCollection = new SkuCollection(true);
         private List<DataItem> SupplierDataList = new List<DataItem>();
+
+        private bool LoadLowStock = false;
+        private bool LoadSupplierLow = false;
+        private bool LoadDiscontinued = false;
+        private bool LoadUnlisted = false;
+        private bool LoadNoSales = false;
         public SupplierData(MainWindow Main, Supplier SupplierCode)
         {
             InitializeComponent();
@@ -36,28 +42,26 @@ namespace ReorderWPF.Pages
 
         internal void PrepareDataGrid(object sender, DoWorkEventArgs e)
         {
-            
+            SupplierDataList.Clear();
             foreach (WhlSKU sku in _supplierSkuCollection.SearchBySuppName(_currentSupplier.Code))
             {
              DataItem refGridRow = new DataItem();
-                refGridRow.Sku = sku.ShortSku;
-                refGridRow.ItemName = sku.Title.Invoice;
-                try
-                {
-                    refGridRow.AverageSales = Int32.Parse(sku.SalesData.EightWeekAverage.ToString());
-                }
-                catch (Exception)
-                {
-                    refGridRow.AverageSales = 0;
-                }
-                
                 foreach (SKUSupplier supp in sku.Suppliers)
                 {
                     if (!supp.Primary) continue;
                     refGridRow.SupplierCode = supp.ReOrderCode;
                 }
-
-
+                refGridRow.Sku = sku.ShortSku;
+                refGridRow.ItemName = sku.Title.Invoice;
+                try
+                {
+                    refGridRow.AverageSales = Int32.Parse(sku.SalesData.EightWeekAverage.ToString());
+                    if (LoadNoSales && Int32.Parse(sku.SalesData.EightWeekAverage.ToString()) == 0) continue;
+                }
+                catch (Exception)
+                {
+                    refGridRow.AverageSales = 0;
+                }          
             SupplierDataList.Add(refGridRow);
             }
             
@@ -65,6 +69,9 @@ namespace ReorderWPF.Pages
 
         private void RenderDataGrid()
         {
+            SupplierDataGrid.Items.Clear();
+            SupplierDataGrid.Columns.Clear();
+            
             DataGridTextColumn SkuColumn = new DataGridTextColumn();
             SkuColumn.Header = "SKU";
             SkuColumn.Binding = new Binding("Sku");
@@ -116,6 +123,34 @@ namespace ReorderWPF.Pages
             }
 
 
+        }
+
+        private void RefreshButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            UpdateBooleans();
+            Misc.OperationDialog("Preparing " + _currentSupplier.Name, PrepareDataGrid);
+            RenderDataGrid();
+        }
+
+        private void UpdateBooleans()
+        {
+            try
+            {
+                if (LowStockCheck.IsChecked == true) LoadLowStock = true;
+                else LoadLowStock = false;
+                if (SupplierLowCheck.IsChecked == true) LoadSupplierLow = true;
+                else LoadSupplierLow = false;
+                if (DiscontCheck.IsChecked == true) LoadDiscontinued = true;
+                else LoadDiscontinued = false;
+                if (UnlistedCheck.IsChecked == true) LoadUnlisted = true;
+                else LoadUnlisted = false;
+                if (NoSalesCheck.IsChecked == true)  LoadNoSales = true;
+                else LoadNoSales = false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 
