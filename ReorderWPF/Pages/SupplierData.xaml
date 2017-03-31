@@ -6,12 +6,43 @@
       xmlns:local="clr-namespace:ReorderWPF.Pages"
       xmlns:custom="clr-namespace:ReorderWPF.CustomControls"
       mc:Ignorable="d"
-      Title="SupplierData" Template="{DynamicResource ThreadedPageTemplate}" Height="370.667" Width="437.667" >
+      Title="SupplierData" Template="{DynamicResource ThreadedPageTemplate}" Foreground="Black" Background="White" >
 
     <Grid>
-        <DataGrid HorizontalAlignment="Left" Height="339" VerticalAlignment="Top" Width="430">
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="167*"/>
+            <RowDefinition Height="303*"/>
+            <RowDefinition Height="166*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="SupplierDetailsGrid" HorizontalAlignment="Left" Width="944">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="167*"/>
+                <ColumnDefinition Width="594*"/>
+                <ColumnDefinition Width="183*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25*"/>
+                    <RowDefinition Height="142*"/>
+                </Grid.RowDefinitions>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Current Order" FontSize="18" TextDecorations="{x:Null}" FontStyle="Italic" Margin="34,2,39,0" Width="110"/>
+                <TextBlock x:Name="CurrentOrderStartDate" HorizontalAlignment="Left" Height="17" Margin="10,10,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Date: 31/03/2017" VerticalAlignment="Top" FontSize="14"/>
+                <TextBlock x:Name="SkusCurrentOrder" HorizontalAlignment="Left" Margin="10,32,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Skus: 25" VerticalAlignment="Top" FontSize="14"/>
+                <TextBlock x:Name="NetOrderTotal" HorizontalAlignment="Left" Margin="10,80,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Net: £45215.29" VerticalAlignment="Top" FontSize="14" Height="19"/>
+                <TextBlock x:Name="TotalItemsCurrentOrder" HorizontalAlignment="Left" Margin="10,56,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Items: 9001" VerticalAlignment="Top" FontSize="14"/>
+                <TextBlock x:Name="GrossCurrentOrder" HorizontalAlignment="Left" Margin="10,104,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Gross: £15000" VerticalAlignment="Top" FontSize="14"/>
+            </Grid>
+            <Grid>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Options" VerticalAlignment="Top" FontStyle="Italic" FontSize="18"/>
+            </Grid>
+        </Grid>
+        <DataGrid x:Name="SupplierDataGrid" Grid.Row="1" CanUserReorderColumns="False">
         </DataGrid>
-
     </Grid>
 </custom:ThreadedPage>

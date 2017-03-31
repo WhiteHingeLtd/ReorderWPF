@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace ReorderWPF.Pages
         private bool UseAreaForChart = false;
         public ItemChart(MainWindow Main, WhlSKU SelectedSku = null)
         {
-            skus = Main.Data_Skus;
+            skus = Main.DataSkus;
             if (SelectedSku != null)
             {
                 _selectedSku = SelectedSku;
@@ -90,9 +91,7 @@ namespace ReorderWPF.Pages
                           FROM whldata.stock_history as a
                             LEFT JOIN(SELECT /*top (999999999999)*/ a.orderdate, a.shortsku, sum(a.total)as ""maintotal"" FROM
                             (SELECT /*top (999999999999)*/ orderdate, sku, SUBSTRING(sku, 0, 8) as ""shortsku"", sum(salequantity) as ""sales"", CAST(SUBSTRING(sku, 8, 4) as unsigned int) as ""packsize"", sum(salequantity * CAST(SUBSTRING(sku, 8, 4) as unsigned int)) as 'total'
-
                              FROM whldata.newsales_raw
-
                              WHERE sku LIKE '" + Sku.ShortSku + @"%'
                              group by sku, orderDate
                              order by orderdate) as a
@@ -106,6 +105,8 @@ namespace ReorderWPF.Pages
                 List<DataPoint> SalesHistoryPoints = new List<DataPoint>();
                 List<DataPoint> StockHistoryPoints2 = new List<DataPoint>();
                 List<DataPoint> SalesHistoryPoints2 = new List<DataPoint>();
+
+
                 LineSeries SalesSeries = new LineSeries();
                 LineSeries StockSeries = new LineSeries();
 
@@ -121,7 +122,55 @@ namespace ReorderWPF.Pages
                 {
                     BottomAxis.AbsoluteMinimum = Convert.ToDouble(startDate);
                 }
-                
+                #region It's fucked
+                //ConcurrentBag<DataPoint> ConcurrentStockHistoryPoints = new ConcurrentBag<DataPoint>();
+                //ConcurrentBag<DataPoint> ConcurrentSalesHistoryPoints = new ConcurrentBag<DataPoint>();
+                //ConcurrentBag<DataPoint> ConcurrentStockHistoryPoints2 = new ConcurrentBag<DataPoint>();
+                //ConcurrentBag<DataPoint> ConcurrentSalesHistoryPoints2 = new ConcurrentBag<DataPoint>();
+                //Parallel.ForEach(QueryDict.Cast<ArrayList>(), (result) =>
+                //    {
+                //        var StockTotal =
+                //        Convert.ToDouble(Int32.Parse(result[2].ToString()) + Int32.Parse(result[3].ToString()));
+                //        Double SalesTotal;
+                //        try
+                //        {
+                //            if (MaxStock < Int32.Parse(result[2].ToString()) + Int32.Parse(result[3].ToString()))
+                //                MaxStock = Int32.Parse(result[2].ToString()) + Int32.Parse(result[3].ToString());
+                //            if (DBNull.Value != result[4])
+                //            {
+                //                if (MaxSales < Int32.Parse(result[4].ToString())) MaxSales = Int32.Parse(result[4].ToString());
+                //            }
+
+                //        }
+                //        catch (Exception)
+                //        {
+
+                //        }
+                //        try
+                //        {
+                //            SalesTotal = Convert.ToDouble(Int32.Parse(result[4].ToString()));
+                //        }
+                //        catch (Exception)
+                //        {
+                //            Console.WriteLine();
+                //            SalesTotal = Convert.ToDouble(0);
+                //        }
+                //        var Date = Convert.ToDouble(DateTime.Parse(result[1].ToString()).ToOADate());
+                //        var StockHistoryPoint = new DataPoint(Date, StockTotal);
+                //        var SaleHistoryPoint = new DataPoint(Date, SalesTotal);
+                //        var StockHistoryPoint2 = new DataPoint(Date, 0);
+                //        ConcurrentSalesHistoryPoints.Add(SaleHistoryPoint);
+                //        ConcurrentStockHistoryPoints.Add(StockHistoryPoint);
+
+                //        ConcurrentSalesHistoryPoints2.Add(StockHistoryPoint2);
+                //        ConcurrentStockHistoryPoints2.Add(StockHistoryPoint2);
+                //    }
+                //);
+                //SalesHistoryPoints.AddRange(ConcurrentSalesHistoryPoints);
+                //SalesHistoryPoints2.AddRange(ConcurrentSalesHistoryPoints2);
+                //StockHistoryPoints.AddRange(ConcurrentStockHistoryPoints);
+                //StockHistoryPoints2.AddRange(ConcurrentStockHistoryPoints2);
+                #endregion
                 foreach (ArrayList Result in QueryDict)
                 {
                     var StockTotal =
@@ -131,7 +180,11 @@ namespace ReorderWPF.Pages
                     {
                         if (MaxStock < Int32.Parse(Result[2].ToString()) + Int32.Parse(Result[3].ToString()))
                             MaxStock = Int32.Parse(Result[2].ToString()) + Int32.Parse(Result[3].ToString());
-                        if (MaxSales < Int32.Parse(Result[4].ToString())) MaxSales = Int32.Parse(Result[4].ToString());
+                        if (DBNull.Value != Result[4])
+                        {
+                            if (MaxSales < Int32.Parse(Result[4].ToString())) MaxSales = Int32.Parse(Result[4].ToString());
+                        }
+
                     }
                     catch (Exception)
                     {
@@ -160,8 +213,7 @@ namespace ReorderWPF.Pages
                 SalesSeries.Points.AddRange(SalesHistoryPoints);
                 StockSeries.Points.AddRange(StockHistoryPoints);
                 
-                //var newLineSeries = new OxyPlot.Series.LineSeries();
-                //newLineSeries.point
+
                 rightAxis.Key = "StockKey";
                 SalesSeries.YAxisKey = leftAxis.Key;
                 SalesSeries.CanTrackerInterpolatePoints = false;

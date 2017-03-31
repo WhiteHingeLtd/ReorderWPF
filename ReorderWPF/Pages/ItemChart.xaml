@@ -26,7 +26,7 @@
         </Grid>
         <TextBox x:Name="SkuBox" HorizontalAlignment="Left" Height="28" Margin="10,10,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" KeyDown="SkuBox_KeyDown"/>
         <Button x:Name="LoadGraphButton" Content="Load Graph" HorizontalAlignment="Left" Margin="210,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="96" Height="28" Click="LoadGraphButton_Click"/>
-        <CheckBox x:Name="UseAreaCheck" Content="CheckBox" HorizontalAlignment="Left" Margin="311,10,0,0" Grid.Row="3" VerticalAlignment="Top" Height="28" Width="19"/>
+        <CheckBox x:Name="UseAreaCheck" Content="CheckBox" HorizontalAlignment="Left" Margin="311,10,0,0" Grid.Row="3" VerticalAlignment="Top" Height="28" Width="19" IsChecked="True"/>
         <TextBlock x:Name="ItemTitle" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18"/>
     </Grid>
 </custom:ThreadedPage>

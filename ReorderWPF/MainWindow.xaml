@@ -7,16 +7,12 @@
 
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="98"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Ribbon x:Name="MainRibbon" Title="Reorder Assistant" Background="#FFBEC7D8" Foreground="Black">
-            <Ribbon.QuickAccessToolBar>
-                <RibbonQuickAccessToolBar>
-                    <RibbonButton/>
-                </RibbonQuickAccessToolBar>
-            </Ribbon.QuickAccessToolBar>
+        <Ribbon x:Name="MainRibbon" Title="Reorder Assistant" Background="#FFBEC7D8" Foreground="Black" Grid.RowSpan="2">
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu IsEnabled="True">
                     <RibbonApplicationMenuItem x:Name="AppMenu_LoadDataButton" Header="Load Data...">
@@ -32,8 +28,9 @@
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="Home">
-                <RibbonGroup Header="Tools" Margin="0,1" Width="81">
-                    <RibbonButton Content="RibbonButton" Margin="0,0,-49,-23" RenderTransformOrigin="0.405,0.475" Click="RibbonButton_Click" LargeImageSource="splash.png" SmallImageSource="splash.png" Height="Auto" Label="Sales Charts"/>
+                <RibbonGroup Header="Tools" Margin="0,1" Width="136">
+                    <RibbonButton Content="RibbonButton" Margin="0,0,-49,-23" RenderTransformOrigin="0.405,0.475" Click="RibbonButton_Click" LargeImageSource="Line-Chart-icon.png" SmallImageSource="Line-Chart-icon.png" Height="Auto" Label="Sales Charts"/>
+                    <RibbonButton x:Name="TestSupplierDataButton" Content="RibbonButton" HorizontalAlignment="Left" Height="70" Margin="76,-45,-122,-17" VerticalAlignment="Top" Width="50" Click="TestSupplierDataButton_Click"/>
                 </RibbonGroup>
             </RibbonTab>
             <RibbonTab x:Name="WarehouseTab" Header="Warehouse" Visibility="Hidden">
@@ -47,7 +44,7 @@
 
 
         </Ribbon>
-        <TabControl x:Name="Tabs" Margin="0" Grid.Row="1"/>
+        <TabControl x:Name="Tabs" Margin="0" Grid.Row="2"/>
     </Grid>
 </RibbonWindow>
 
