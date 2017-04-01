@@ -25,8 +25,8 @@ namespace ReorderWPF.Pages
                     var DiscontCount = MSSQLPublic.SelectData("SELECT COUNT(*) FROM whldata.sku_supplierdata WHERE SupplierName ='" +Supp.Code + "' AND isDiscontinued='True' ;") as ArrayList;
                     refcontrol.FullSupplierName.Text = Supp.Name;
                     refcontrol.SupplierCode.Text = Supp.Code;
-                    refcontrol.TotalLines.Text = (suppcount[0] as ArrayList)[0].ToString();
-                    refcontrol.Discontinued.Text = (DiscontCount[0] as ArrayList)[0].ToString();
+                    refcontrol.TotalLines.Text = (suppcount[0] as ArrayList)[0].ToString() + " Lines";
+                    refcontrol.Discontinued.Text = (DiscontCount[0] as ArrayList)[0].ToString() + " Discontinued";
                     refcontrol.SupplierCodeInternal = Supp.Code;
                     refcontrol.SupplierInternal = Supp;
                     refcontrol.MouseUp += Refcontrol_MouseUp;
@@ -65,9 +65,13 @@ namespace ReorderWPF.Pages
         internal override void TabClosing(ref bool cancel)
         {
             MessageBoxResult asd = MessageBox.Show("Are you sure","Close Application",MessageBoxButton.YesNo);
-            if (asd == MessageBoxResult.Yes)
+            if (asd == MessageBoxResult.No)
             {
                 cancel = true;
+            }
+            else
+            {
+                cancel = false;
             }
         
         }

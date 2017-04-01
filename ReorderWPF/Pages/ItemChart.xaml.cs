@@ -1,29 +1,14 @@
-﻿using System;
+﻿using OxyPlot;
+using OxyPlot.Axes;
+using ReorderWPF.CustomControls;
+using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
-using OxyPlot.Wpf;
-using ReorderWPF.CustomControls;
+using ReorderWPF.Dialogs;
 using WHLClasses;
-using DateTimeAxis = OxyPlot.Wpf.DateTimeAxis;
 using LineSeries = OxyPlot.Series.LineSeries;
 
 namespace ReorderWPF.Pages
@@ -34,12 +19,15 @@ namespace ReorderWPF.Pages
     public partial class ItemChart : ThreadedPage
     {
         private SkuCollection skus = new SkuCollection(true);
+        private SkuCollection mixdownCollection = new SkuCollection(true);
         private WhlSKU _selectedSku = new WhlSKU();
         private PlotModel PlotGlobal = new PlotModel();
         private bool UseAreaForChart = false;
+        private bool IgnoreStockMinimums = false;
         public ItemChart(MainWindow Main, WhlSKU SelectedSku = null)
         {
             skus = Main.DataSkus;
+            mixdownCollection = Main.DataSkusMixDown;
             if (SelectedSku != null)
             {
                 _selectedSku = SelectedSku;
@@ -66,7 +54,6 @@ namespace ReorderWPF.Pages
                 var startDate = DateTime.Now.AddMonths(-6).ToOADate();
                 var BottomAxis = new OxyPlot.Axes.DateTimeAxis();
                 BottomAxis.Position = AxisPosition.Bottom;
-                BottomAxis.Minimum = Convert.ToDouble(startDate);
                 BottomAxis.Maximum = Convert.ToDouble(endDate);
 
                 BottomAxis.AbsoluteMaximum = Convert.ToDouble(endDate);
@@ -78,13 +65,12 @@ namespace ReorderWPF.Pages
                 leftAxis.Position = AxisPosition.Left;
                 leftAxis.Minimum = 0;
                 leftAxis.AbsoluteMinimum = 0;
-                leftAxis.Maximum = 1000;
                 leftAxis.Title = "Sales";
                 var rightAxis = new OxyPlot.Axes.LinearAxis();
                 rightAxis.Position = AxisPosition.Right;
                 rightAxis.Minimum = 0;
                 rightAxis.AbsoluteMinimum = 0;
-                rightAxis.Maximum = 3000;
+                rightAxis.Maximum = 5000;
                 rightAxis.Title = "Stock";
 
                 var query = @"SELECT a.shortSku, a.stockDate, a.Stocklevel, a.StockMinimum, b.maintotal 
@@ -117,10 +103,12 @@ namespace ReorderWPF.Pages
                 try
                 {
                     BottomAxis.AbsoluteMinimum = Convert.ToDouble(DateTime.Parse((QueryDict[0] as ArrayList)[1].ToString()).ToOADate());
+                    BottomAxis.Minimum = Convert.ToDouble(DateTime.Parse((QueryDict[0] as ArrayList)[1].ToString()).ToOADate());
                 }
                 catch (Exception)
                 {
                     BottomAxis.AbsoluteMinimum = Convert.ToDouble(startDate);
+                    BottomAxis.Minimum = Convert.ToDouble(startDate);
                 }
                 #region It's fucked
                 //ConcurrentBag<DataPoint> ConcurrentStockHistoryPoints = new ConcurrentBag<DataPoint>();
@@ -173,8 +161,15 @@ namespace ReorderWPF.Pages
                 #endregion
                 foreach (ArrayList Result in QueryDict)
                 {
-                    var StockTotal =
-                        Convert.ToDouble(Int32.Parse(Result[2].ToString()) + Int32.Parse(Result[3].ToString()));
+                    Double StockTotal;
+                    if (IgnoreStockMinimums)
+                    {
+                        StockTotal = Convert.ToDouble(Int32.Parse(Result[2].ToString()));
+                    }
+                    else
+                    {
+                        StockTotal = Convert.ToDouble(Int32.Parse(Result[2].ToString()) + Int32.Parse(Result[3].ToString()));
+                    }
                     Double SalesTotal;
                     try
                     {
@@ -255,43 +250,73 @@ namespace ReorderWPF.Pages
                     PlotArea.Series.Add(SalesSeries);
 
                 }
-
-
-                leftAxis.AbsoluteMaximum = MaxSales;
-                rightAxis.AbsoluteMaximum = MaxStock;
-                PlotArea.Axes.Add(BottomAxis);
-                PlotArea.Axes.Add(leftAxis);
-                PlotArea.Axes.Add(rightAxis);
                 if (MaxSales == 0)
                 {
                     leftAxis.AbsoluteMaximum = 1;
                     rightAxis.AbsoluteMaximum += 10;
                     leftAxis.Title = "No sales";
                 }
-                
-                
+                if (MaxSales > 0)
+                {
+                    leftAxis.AbsoluteMaximum = MaxSales * 1.15;
+                    leftAxis.Maximum = MaxSales * 1.1;
+                    rightAxis.Maximum = MaxStock * 1.1;
+                    rightAxis.AbsoluteMaximum = MaxStock * 1.15;
+                }
+                leftAxis.IsZoomEnabled = false;
+                leftAxis.AbsoluteMaximum = MaxSales;
+                rightAxis.AbsoluteMaximum = MaxStock;
+                PlotArea.Axes.Add(BottomAxis);
+                PlotArea.Axes.Add(leftAxis);
+                PlotArea.Axes.Add(rightAxis);
 
-                
-                //MessageBox.Show(QueryDict.Count.ToString());
                 PlotArea.Title = Sku.ShortSku + " Sales/Stock History";
+                
                 PlotGlobal = PlotArea;
             }
         }
 
         private void LoadGraphButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SkuBox.Text.Length == 7 || SkuBox.Text.Length == 11)
+            try
             {
-                var SkuText = SkuBox.Text.Substring(0, 7) + "0001";
-                _selectedSku = skus.SearchSKUSReturningSingleSku(SkuText);
+                _selectedSku = null;
+                if (SkuBox.Text.Length == 7 || SkuBox.Text.Length == 13)
+                {
+                    var SkuText = SkuBox.Text.Substring(0, 7) + "0001";
+                    _selectedSku = skus.SearchSKUSReturningSingleSku(SkuText);
+                    
+                }
+                else
+                {
+                    var SearchColl = new SkuCollection(true);
+                    var SuppCodeTest = SkuBox.Text;
+                    SearchColl = mixdownCollection.SearchSKUS(SuppCodeTest,true);
+                    if (SearchColl.Count == 1) _selectedSku = SearchColl[0];
+                    else
+                    {
+                        var Dialog = new SearchOptionsDialog(SearchColl);
+                        Dialog.ShowDialog();
+                    }
+
+
+
+                }
+                if (_selectedSku == null) throw(new Exception("Unrecognised String"));
                 ItemTitle.Text = _selectedSku.Title.Invoice;
-                this.Title = _selectedSku.ShortSku;
                 if (UseAreaCheck.IsChecked == true) UseAreaForChart = true;
                 else UseAreaForChart = false;
+
+                if (IgnoreStockMinimumCheck.IsChecked == true) IgnoreStockMinimums = true;
+                else IgnoreStockMinimums = false;
                 Misc.OperationDialog("Loading Chart", LoadChartWorker);
                 PlotPlot.Model = PlotGlobal;
-                SkuBox.Text = "";
             }
+            catch (Exception)
+            {
+
+            }
+            
         }
         private void LoadChartWorker (object sender, DoWorkEventArgs e)
         {

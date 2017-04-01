@@ -1,5 +1,6 @@
 ﻿using ReorderWPF.UserControls;
 using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Controls;
@@ -21,7 +22,7 @@ namespace ReorderWPF
     {
         public EmployeeCollection Data_Employees;
         internal WHLClasses.Authentication.AuthClass User_Employee;
-        internal SkuCollection DataSkus;
+        public SkuCollection DataSkus;
         internal SkuCollection DataSkusMixDown;
         internal SupplierCollection SupplierCollection;
 
@@ -139,23 +140,22 @@ namespace ReorderWPF
             DataSkus = loader.SmartSkuCollLoad();
             DataSkusMixDown = DataSkus.MakeMixdown();
         }
+
     }
 
     public class SupplierOrderData
     {
         public Guid OrderGuid;
-        public string SupplierCode;
-        public string OrderId;
+        public string SupplierCode = "";
+        public string OrderId = "";
         public DateTime OrderDate;
         public DateTime OrderDelivered;
         public DateTime OrderInvoiced;
-        public int LinesOfStock;
-        public Single NetValue;
-        public string CustomOrderNote;
-        public string CustomDeliveryNote;
-        public List<Dictionary<WhlSKU, int>> SkuOrderList;
-
-
+        public int LinesOfStock = 0;
+        public Single NetValue = 0;
+        public string CustomOrderNote = "";
+        public string CustomDeliveryNote = "";
+        public Dictionary<WhlSKU, int> SkuOrderList;
 
         public enum OrderStates
         {
@@ -164,5 +164,69 @@ namespace ReorderWPF
             Delivered = 2,
             Closed = 3
         }
+
+        public SupplierOrderData(string Supplier)
+        {
+
+        }
+        public SupplierOrderData(Supplier Supplier)
+        {
+            SupplierCode = Supplier.Code;
+            OrderGuid = new Guid();
+            OrderDate = DateTime.Now;
+            LinesOfStock = 0;
+            NetValue = 0;
+            CustomDeliveryNote = "";
+        }
+
+        public SupplierOrderData(bool cancel = true)
+        {
+            
+        }
+
+}
+
+    public class SupplierData
+    {
+        public string SupplierName;
+        public string SupplierCode;
+        public int Lines;
+        public int Discontinued;
+        public int Oversold;
+        public int LowStock;
+        public Single LowPercentage;
+        public DateTime LastOrder;
+        public DateTime DateDue;
+        public SkuCollection ListOfSkus;
+
+        public SupplierData(string code,SkuCollection FullCollection)
+        {
+            SupplierCode = code;
+            ListOfSkus = FullCollection.SearchBySuppName(code);
+            Lines = ListOfSkus.Count;
+            LowPercentage = LowStock / Lines;
+        }
     }
+
+    public class ReorderDataLoader
+    {
+        public SupplierOrderData LoadSupplierOrderData(Guid orderGuid)
+        {
+            var returnable = new SupplierOrderData();
+            var OrderData = MySQL.SelectDataDictionary("SELECT * from whldata.reorder_orders WHERE orderguid='" + orderGuid.ToString() + "';");
+            return returnable;
+        }
+        public void SaveCurrentOrderToDatabase(object sender, DoWorkEventArgs e)
+        {
+            if (sender.GetType() == typeof(SupplierOrderData))
+            {
+                var CurrentOrder = sender as SupplierOrderData;
+                if (CurrentOrder == null) throw new NullReferenceException();
+                MySQL.insertUpdate("DELETE FROM whldata.reorder_orders WHERE OrderGUID = '" + CurrentOrder.OrderGuid.ToString() + "'");
+               // MySQL.insertUpdate(@"INSERT INTO whldata.reorder_orders (OrderGUID, SupplierCode, CustomOrderID, OrderDate, OrderDelivered, OrderInvoiced, LinesOfStock, NetValue, CustomOrderNote, CustomDeliveryNote,OrderState)
+                //                    VALUES ('"+ CurrentOrder.OrderGuid+ "','" + CurrentOrder.SupplierCode + "','"
+            }
+        }
+    }
+
 }

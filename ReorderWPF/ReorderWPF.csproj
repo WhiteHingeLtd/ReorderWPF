@@ -28,7 +28,7 @@
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -103,6 +103,9 @@
     </ApplicationDefinition>
     <Compile Include="CustomControls\PageFrameTab.cs" />
     <Compile Include="CustomControls\ThreadedPage.cs" />
+    <Compile Include="Dialogs\SearchOptionsDialog.xaml.cs">
+      <DependentUpon>SearchOptionsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ItemChart.xaml.cs">
       <DependentUpon>ItemChart.xaml</DependentUpon>
     </Compile>
@@ -119,6 +122,10 @@
     <Compile Include="UserControls\SupplierControl.xaml.cs">
       <DependentUpon>SupplierControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="Dialogs\SearchOptionsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -190,9 +197,7 @@
   <ItemGroup>
     <SplashScreen Include="splash.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dialogs\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
