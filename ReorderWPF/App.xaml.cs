@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-
+﻿using System.Windows;
+using System.Windows.Threading;
 namespace ReorderWPF
 {
     /// <summary>
@@ -13,5 +7,18 @@ namespace ReorderWPF
     /// </summary>
     public partial class App : Application
     {
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            if (e.Exception.Message == "\'EditItem\' is not allowed for this view.")
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                WHLClasses.Reporting.ErrorReporting.ReportException(e.Exception, false);
+                e.Handled = true;
+            }
+
+        }
     }
 }

@@ -51,7 +51,9 @@ namespace ReorderWPF
             LoadAssemblies(this.GetType().Assembly);
             GenericDataController loader = new GenericDataController();
             Worker.ReportProgress(0, "Loading Item Data");
-            HomeRef.Data_Skus = loader.SmartSkuCollLoad();
+            HomeRef.DataSkus = loader.SmartSkuCollLoad();
+            Worker.ReportProgress(0,"Making Mixdown");
+            HomeRef.DataSkusMixDown = HomeRef.DataSkus.MakeMixdown();
             Worker.ReportProgress(0, "Loading Employee Data");
             HomeRef.Data_Employees = new EmployeeCollection();
             Worker.ReportProgress(0, "Loading Supplier Collection");

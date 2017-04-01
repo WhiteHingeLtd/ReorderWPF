@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Windows.Forms;
@@ -50,10 +46,8 @@ namespace ReorderWPF.CustomControls
 
         public void TimerTick(object sender, EventArgs e)
         {
-            if (ClockBlock == null)
-                ClockBlock = this.Template.FindName("ClockBlock", this) as TextBlock;
-            if ((ClockBlock != null))
-                ClockBlock.Text = DateTime.Now.ToString("HH:mm:ss");
+            if (ClockBlock == null)ClockBlock = this.Template.FindName("ClockBlock", this) as TextBlock;
+            else ClockBlock.Text = DateTime.Now.ToString("HH:mm:ss"); 
 
         }
 

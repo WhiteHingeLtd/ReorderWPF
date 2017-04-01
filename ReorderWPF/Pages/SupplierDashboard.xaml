@@ -10,7 +10,7 @@
       Title="SupplierDashboard" Template="{DynamicResource ThreadedPageTemplate}">
 
     <Grid>
-        <ScrollViewer HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Visibility="Collapsed">
+        <ScrollViewer HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
             <StackPanel x:Name="SupplierStackPanel" VerticalAlignment="Top" MinHeight="50"/>
         </ScrollViewer>
 

@@ -1,6 +1,7 @@
 ﻿using ReorderWPF.UserControls;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
 using System.ComponentModel;
@@ -20,7 +21,8 @@ namespace ReorderWPF
     {
         public EmployeeCollection Data_Employees;
         internal WHLClasses.Authentication.AuthClass User_Employee;
-        internal SkuCollection Data_Skus;
+        internal SkuCollection DataSkus;
+        internal SkuCollection DataSkusMixDown;
         internal SupplierCollection SupplierCollection;
 
         public MainWindow()
@@ -123,6 +125,44 @@ namespace ReorderWPF
         private void RibbonButton_Click(object sender, RoutedEventArgs e)
         {
             NewTab(new ItemChart(this));
+        }
+
+
+        private void RefreshItemDataButton_Click(object sender, RoutedEventArgs e)
+        {
+            Misc.OperationDialog("Refreshing Item Data",ItemDataRefreshForWorker);
+        }
+
+        private void ItemDataRefreshForWorker(object sender, DoWorkEventArgs e)
+        {
+            GenericDataController loader = new GenericDataController();
+            DataSkus = loader.SmartSkuCollLoad();
+            DataSkusMixDown = DataSkus.MakeMixdown();
+        }
+    }
+
+    public class SupplierOrderData
+    {
+        public Guid OrderGuid;
+        public string SupplierCode;
+        public string OrderId;
+        public DateTime OrderDate;
+        public DateTime OrderDelivered;
+        public DateTime OrderInvoiced;
+        public int LinesOfStock;
+        public Single NetValue;
+        public string CustomOrderNote;
+        public string CustomDeliveryNote;
+        public List<Dictionary<WhlSKU, int>> SkuOrderList;
+
+
+
+        public enum OrderStates
+        {
+            Ordered = 0,
+            Invoiced = 1,
+            Delivered = 2,
+            Closed = 3
         }
     }
 }
