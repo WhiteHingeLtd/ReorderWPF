@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ReorderWPF.Pages"
       xmlns:custom="clr-namespace:ReorderWPF.CustomControls"
+      xmlns:oxy="http://oxyplot.org/wpf"
       mc:Ignorable="d"
       Title="SupplierData" Template="{DynamicResource ThreadedPageTemplate}" Foreground="Black" Background="White" >
 
@@ -23,9 +24,6 @@
                 <ColumnDefinition Width="183*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25*"/>
                     <RowDefinition Height="142*"/>
@@ -38,24 +36,74 @@
                 <TextBlock x:Name="GrossCurrentOrder" HorizontalAlignment="Left" Margin="10,104,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Gross: £15000" VerticalAlignment="Top" FontSize="14"/>
             </Grid>
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
-                    <ColumnDefinition Width="79*"/>
+                    <ColumnDefinition Width="0*"/>
+                    <ColumnDefinition Width="0*"/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Options" VerticalAlignment="Top" FontStyle="Italic" FontSize="18" Grid.Column="1" Margin="48,0"/>
-                <CheckBox x:Name="LowStockCheck" Content="Low Stock" HorizontalAlignment="Left" Margin="0,29,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-                <CheckBox x:Name="SupplierLowCheck" Content="Supplier Low" Grid.Column="1" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="DiscontCheck" Content="Discontinued" Grid.Column="1" HorizontalAlignment="Left" Margin="0,69,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="UnlistedCheck" Content="New (Unlisted)" Grid.Column="1" HorizontalAlignment="Left" Margin="0,89,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="NoSalesCheck" Content="No Sales" Grid.Column="1" HorizontalAlignment="Left" Margin="0,109,0,0" VerticalAlignment="Top"/>
-                <Button x:Name="RefreshButton" Content="Refresh Items" Grid.Column="1" HorizontalAlignment="Center" Margin="34,160,48,0" Click="RefreshButton_Click" VerticalAlignment="Bottom"/>
-                <CheckBox x:Name="PrimaryOnlyCheck" Content="Primary Only" Grid.Column="1" HorizontalAlignment="Left" Margin="0,129,0,0" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Options" VerticalAlignment="Top" FontStyle="Italic" FontSize="18" Grid.Column="1" Margin="48,0" Grid.ColumnSpan="2"/>
+                <CheckBox x:Name="LowStockCheck" Content="Low Stock" HorizontalAlignment="Left" Margin="0,29,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <CheckBox x:Name="SupplierLowCheck" Content="Supplier Low" Grid.Column="1" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <CheckBox x:Name="DiscontCheck" Content="Discontinued" Grid.Column="1" HorizontalAlignment="Left" Margin="0,69,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <CheckBox x:Name="UnlistedCheck" Content="New (Unlisted)" Grid.Column="1" HorizontalAlignment="Left" Margin="0,89,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <CheckBox x:Name="NoSalesCheck" Content="No Sales" Grid.Column="1" HorizontalAlignment="Left" Margin="0,109,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <Button x:Name="RefreshButton" Content="Refresh Items" Grid.Column="1" HorizontalAlignment="Center" Margin="34,0,48,0" Click="RefreshButton_Click" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
+                <CheckBox x:Name="PrimaryOnlyCheck" Content="Primary Only" Grid.Column="1" HorizontalAlignment="Left" Margin="0,129,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
             </Grid>
         </Grid>
-        <DataGrid x:Name="SupplierDataGrid" Grid.Row="1" CanUserReorderColumns="False" Margin="0,10">
+        <DataGrid x:Name="SupplierDataGrid" Grid.Row="1" CanUserReorderColumns="False" Margin="0,10" AutoGenerateColumns="False" SelectionMode="Single">
+            <DataGrid.DataContext>
+                <local:DataItem/>
+            </DataGrid.DataContext>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Sku" Binding="{Binding Sku}" />
+                <DataGridTextColumn Header="Item Name" Binding="{Binding ItemName}" />
+                <DataGridTextColumn Header="Weeks" Binding="{Binding WeeksRemaining}" />
+                <DataGridTextColumn Header="Code" Binding="{Binding SupplierCode}" />
+                <DataGridTextColumn Header="Average Sales" Binding="{Binding AverageSales}" />
+                <DataGridTextColumn Header="Level" Binding="{Binding StockLevel}" />
+                <DataGridTextColumn Header="Recommended" Binding="{Binding RecommendedToOrder}" />
+            </DataGrid.Columns>
+
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="77*"/>
+                            <RowDefinition Height="37*"/>
+                            <RowDefinition Height="209*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="1">
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="145*"/>
+                                    <ColumnDefinition Width="113*"/>
+                                    <ColumnDefinition Width="74*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="ItemName" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="16" Margin="0,8" Text="{Binding ItemName}"/>
+                                <TextBlock x:Name="Locations" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="SupplierCodeText" Grid.Column="2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding SupplierCode}"/>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="383*"/>
+                                <ColumnDefinition Width="584*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="111*"/>
+                                <RowDefinition Height="140*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="1">
+                                <DataGrid x:Name="PacksizeDatagrid"/>
+                            </Grid>
+                        </Grid>
+
+                    </Grid>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+
         </DataGrid>
     </Grid>
 </custom:ThreadedPage>

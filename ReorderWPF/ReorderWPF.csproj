@@ -102,6 +102,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CustomControls\PageFrameTab.cs" />
+    <Compile Include="CustomControls\RowDetailsTemplate.xaml.cs">
+      <DependentUpon>RowDetailsTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomControls\ThreadedPage.cs" />
     <Compile Include="Dialogs\SearchOptionsDialog.xaml.cs">
       <DependentUpon>SearchOptionsDialog.xaml</DependentUpon>
@@ -122,6 +125,10 @@
     <Compile Include="UserControls\SupplierControl.xaml.cs">
       <DependentUpon>SupplierControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="CustomControls\RowDetailsTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\SearchOptionsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

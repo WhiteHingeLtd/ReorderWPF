@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="ReorderWPF.CustomControls.RowDetailsTemplate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ReorderWPF.CustomControls"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             mc:Ignorable="d" Height="388.127" Width="966.51" Background="White">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="77*"/>
+            <RowDefinition Height="37*"/>
+            <RowDefinition Height="209*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="145*"/>
+                    <ColumnDefinition Width="113*"/>
+                    <ColumnDefinition Width="74*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="ItemName" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="16" Margin="0,8"/>
+                <TextBlock x:Name="Locations" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                <TextBlock x:Name="SupplierCodeText" Grid.Column="2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="383*"/>
+                <ColumnDefinition Width="584*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="111*"/>
+                <RowDefinition Height="140*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="1">
+                <DataGrid x:Name="PacksizeDatagrid"/>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</UserControl>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using WHLClasses;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,9 +15,11 @@ namespace ReorderWPF.Pages
     public partial class SupplierData : ThreadedPage
     {
         private Supplier _currentSupplier;
-        private SkuCollection _supplierSkuCollectionfull = new SkuCollection(true);
+        public static SkuCollection SupplierSkuCollectionFull = new SkuCollection(true);
         private SkuCollection _supplierSkuCollection = new SkuCollection(true);
         private List<DataItem> SupplierDataList = new List<DataItem>();
+        private List<DataItemDetails> CurrentPacksizes = new List<DataItemDetails>();
+        private SupplierOrderData CurrentSupplierOrder = new SupplierOrderData();
 
         private bool LoadLowStock = false;
         private bool LoadSupplierLow = false;
@@ -29,7 +32,7 @@ namespace ReorderWPF.Pages
             SetMainWindowRef(Main);
             Title = SupplierCode.Name;
             _currentSupplier = SupplierCode;
-            _supplierSkuCollectionfull = Main.DataSkus;
+            SupplierSkuCollectionFull = Main.DataSkus;
             _supplierSkuCollection = Main.DataSkusMixDown;
             Misc.OperationDialog("Preparing " + SupplierCode.Name,PrepareDataGrid);
             RenderDataGrid();
@@ -53,6 +56,7 @@ namespace ReorderWPF.Pages
                 }
                 refGridRow.Sku = sku.ShortSku;
                 refGridRow.ItemName = sku.Title.Invoice;
+                
                 try
                 {
                     refGridRow.AverageSales = Int32.Parse(sku.SalesData.EightWeekAverage.ToString());
@@ -69,60 +73,8 @@ namespace ReorderWPF.Pages
 
         private void RenderDataGrid()
         {
-            SupplierDataGrid.Items.Clear();
-            SupplierDataGrid.Columns.Clear();
-            
-            DataGridTextColumn SkuColumn = new DataGridTextColumn();
-            SkuColumn.Header = "SKU";
-            SkuColumn.Binding = new Binding("Sku");
-            SupplierDataGrid.Columns.Add(SkuColumn);
-            DataGridTextColumn ItemNameColumn = new DataGridTextColumn();
-            ItemNameColumn.Header = "Item Name";
-            ItemNameColumn.Binding = new Binding("ItemName");
-            SupplierDataGrid.Columns.Add(ItemNameColumn);
-            DataGridTextColumn WeeksRemainingColumn = new DataGridTextColumn();
-            WeeksRemainingColumn.Header = "Weeks Remaining";
-            WeeksRemainingColumn.Binding = new Binding("WeeksRemaining");
-            SupplierDataGrid.Columns.Add(WeeksRemainingColumn);
-            DataGridTextColumn SupplierCodeColumn = new DataGridTextColumn();
-            SupplierCodeColumn.Header = "Supplier Code";
-            SupplierCodeColumn.Binding = new Binding("SupplierCode");
-            SupplierDataGrid.Columns.Add(SupplierCodeColumn);
-            DataGridTextColumn AverageSalesColumn = new DataGridTextColumn();
-            AverageSalesColumn.Header = "Avg Sales";
-            AverageSalesColumn.Binding = new Binding("AverageSales");
-            SupplierDataGrid.Columns.Add(AverageSalesColumn);
-            DataGridTextColumn StockLevelColumn = new DataGridTextColumn();
-            StockLevelColumn.Header = "Stock";
-            StockLevelColumn.Binding = new Binding("StockLevel");
-            SupplierDataGrid.Columns.Add(StockLevelColumn);
-            DataGridTextColumn RecommendedSalesColumn = new DataGridTextColumn();
-            RecommendedSalesColumn.Header = "Rec.";
-            RecommendedSalesColumn.Binding = new Binding("RecommendedToOrder");
-            SupplierDataGrid.Columns.Add(RecommendedSalesColumn);
-            DataGridTextColumn InnerSalesColumn = new DataGridTextColumn();
-            InnerSalesColumn.Header = "Inner";
-            InnerSalesColumn.Binding = new Binding("InnerCarton");
-            SupplierDataGrid.Columns.Add(InnerSalesColumn);
-            DataGridTextColumn OuterSalesColumn = new DataGridTextColumn();
-            OuterSalesColumn.Header = "Outer";
-            OuterSalesColumn.Binding = new Binding("OuterCarton");
-            SupplierDataGrid.Columns.Add(OuterSalesColumn);
-            DataGridTextColumn NumOnOrderSalesColumn = new DataGridTextColumn();
-            NumOnOrderSalesColumn.Header = "On Order";
-            NumOnOrderSalesColumn.Binding = new Binding("NumOnOrder");
-            SupplierDataGrid.Columns.Add(NumOnOrderSalesColumn);
-            DataGridTextColumn NetOrderPriceSalesColumn = new DataGridTextColumn();
-            NetOrderPriceSalesColumn.Header = "Net Price";
-            NetOrderPriceSalesColumn.Binding = new Binding("NetOrderPrice");
-            SupplierDataGrid.Columns.Add(NetOrderPriceSalesColumn);
 
-            foreach (DataItem Item in SupplierDataList)
-            {
-                SupplierDataGrid.Items.Add(Item);
-            }
-
-
+            SupplierDataGrid.ItemsSource = SupplierDataList;
         }
 
         private void RefreshButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -152,6 +104,26 @@ namespace ReorderWPF.Pages
                 Console.WriteLine(e);
             }
         }
+
+        private void UpdateCurrentOrderData()
+        {
+            SkusCurrentOrder.Text = "Skus: " + CurrentSupplierOrder.LinesOfStock.ToString();
+            TotalItemsCurrentOrder.Text = "Items: " + CurrentSupplierOrder.SkuOrderList.Sum(v => v.Value);
+        }
+
+        private void AddToCurrentOrder(WhlSKU Item, int Quantity)
+        {
+            if (CurrentSupplierOrder.SkuOrderList.ContainsKey(Item))
+            {
+                CurrentSupplierOrder.SkuOrderList[Item] += Quantity;
+            }
+            else
+            {
+                CurrentSupplierOrder.SkuOrderList.Add(Item, Quantity);
+            }
+        }
+
+
     }
 
     public class DataItem
@@ -167,8 +139,36 @@ namespace ReorderWPF.Pages
         public int OuterCarton { get; set; }
         public int NumOnOrder { get; set; }
         public Single NetOrderPrice { get; set; }
-    
+        public WhlSKU SkuData { get; set; }
+
+        public SkuCollection Children => SupplierData.SupplierSkuCollectionFull.GatherChildren(SkuData.ShortSku);
+
+        public List<DataItemDetails> Packsizes
+        {
+            get
+            {
+                var PacksizeList = new List<DataItemDetails>();
+                foreach (WhlSKU Pack in this.Children)
+                {
+                    var newitem = new DataItemDetails(Pack);
+                    PacksizeList.Add(newitem);
+                }
+                return PacksizeList;
+            }
+            
+        }
 
     }
 
+    public class DataItemDetails
+    {
+        public string ShortSku { get; set; }
+        public string Packsize { get; set; }
+        public Single WeeksLeft { get; set; }
+
+        public DataItemDetails(WhlSKU item)
+        {
+            
+        }
+    }
 }

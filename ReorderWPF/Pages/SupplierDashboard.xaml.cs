@@ -21,8 +21,8 @@ namespace ReorderWPF.Pages
                 var refcontrol = new SupplierControl();
                 try
                 {
-                    var suppcount = MSSQLPublic.SelectData("SELECT COUNT(*) FROM whldata.sku_supplierdata WHERE SupplierName ='" + Supp.Code + "';") as ArrayList;
-                    var DiscontCount = MSSQLPublic.SelectData("SELECT COUNT(*) FROM whldata.sku_supplierdata WHERE SupplierName ='" +Supp.Code + "' AND isDiscontinued='True' ;") as ArrayList;
+                    var suppcount = MySQL.SelectData("SELECT COUNT(*) FROM whldata.sku_supplierdata WHERE SupplierName ='" + Supp.Code + "';") as ArrayList;
+                    var DiscontCount = MySQL.SelectData("SELECT COUNT(*) FROM whldata.sku_supplierdata WHERE SupplierName ='" +Supp.Code + "' AND isDiscontinued='True' ;") as ArrayList;
                     refcontrol.FullSupplierName.Text = Supp.Name;
                     refcontrol.SupplierCode.Text = Supp.Code;
                     refcontrol.TotalLines.Text = (suppcount[0] as ArrayList)[0].ToString() + " Lines";
