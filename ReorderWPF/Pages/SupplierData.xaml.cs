@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using WHLClasses;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using ReorderWPF.CustomControls;
 
 namespace ReorderWPF.Pages
@@ -20,6 +22,8 @@ namespace ReorderWPF.Pages
         private List<DataItem> SupplierDataList = new List<DataItem>();
         private List<DataItemDetails> CurrentPacksizes = new List<DataItemDetails>();
         private SupplierOrderData CurrentSupplierOrder = new SupplierOrderData();
+        private DataItem CurrentSelectedItem = new DataItem();
+        internal List<DataItemDetails> CurrentSelectedPacksizes = new List<DataItemDetails>();
 
         private bool LoadLowStock = false;
         private bool LoadSupplierLow = false;
@@ -48,25 +52,8 @@ namespace ReorderWPF.Pages
             SupplierDataList.Clear();
             foreach (WhlSKU sku in _supplierSkuCollection.SearchBySuppName(_currentSupplier.Code))
             {
-             DataItem refGridRow = new DataItem();
-                foreach (SKUSupplier supp in sku.Suppliers)
-                {
-                    if (!supp.Primary) continue;
-                    refGridRow.SupplierCode = supp.ReOrderCode;
-                }
-                refGridRow.Sku = sku.ShortSku;
-                refGridRow.ItemName = sku.Title.Invoice;
-                
-                try
-                {
-                    refGridRow.AverageSales = Int32.Parse(sku.SalesData.EightWeekAverage.ToString());
-                    if (LoadNoSales && Int32.Parse(sku.SalesData.EightWeekAverage.ToString()) == 0) continue;
-                }
-                catch (Exception)
-                {
-                    refGridRow.AverageSales = 0;
-                }          
-            SupplierDataList.Add(refGridRow);
+                var newItem = DataItem.DataItemNew(sku);
+            SupplierDataList.Add(newItem);
             }
             
         }
@@ -123,14 +110,42 @@ namespace ReorderWPF.Pages
             }
         }
 
+        private void SupplierDataGrid_RowDetailsVisibilityChanged(object sender, DataGridRowDetailsEventArgs e)
+        {
+            if (CurrentSelectedItem != e.Row.Item)
+            {
+                Grid asd = e.DetailsElement as Grid;
+                DataGrid asd1 = FindVisualChild<DataGrid>(asd);
+                asd1.DataContext = CurrentSelectedPacksizes;
+                CurrentSelectedPacksizes = (e.Row.Item as DataItem).Packsizes;
+                CurrentSelectedItem = e.Row.Item as DataItem;
+            }
 
+        }
+        public static childItem FindVisualChild<childItem>(DependencyObject obj)
+            where childItem : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is childItem)
+                    return (childItem)child;
+                else
+                {
+                    childItem childOfChild = FindVisualChild<childItem>(child);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
+            }
+            return null;
+        }
     }
 
     public class DataItem
     {
         public string Sku { get; set; }
         public string ItemName { get; set; }
-        public Single WeeksRemaining { get; set; }
+        public double WeeksRemaining { get; set; }
         public string SupplierCode { get; set; }
         public int AverageSales { get; set; }
         public int StockLevel { get; set; }
@@ -141,7 +156,57 @@ namespace ReorderWPF.Pages
         public Single NetOrderPrice { get; set; }
         public WhlSKU SkuData { get; set; }
 
+        public string Locations
+        {
+            get
+            {
+                var returnstring = "Locations :";
+                foreach(SKULocation loc in SkuData.Locations)
+                {
+                    returnstring += loc.LocationText + ", ";
+                }
+                returnstring = returnstring.TrimEnd();
+                returnstring = returnstring.Remove(returnstring.Length - 1);
+                return returnstring;
+            }
+            
+        }
+
         public SkuCollection Children => SupplierData.SupplierSkuCollectionFull.GatherChildren(SkuData.ShortSku);
+
+        public static DataItem DataItemNew(WhlSKU sku)
+        {
+            var NewItem = new DataItem();
+            NewItem.ItemName = sku.Title.Invoice;
+            NewItem.Sku = sku.ShortSku;
+            NewItem.SkuData = sku;
+            NewItem.StockLevel = sku.Stock.Level;
+            
+            try
+            {
+                NewItem.AverageSales = Int32.Parse(sku.SalesData.EightWeekAverage.ToString());               
+            }
+            catch (Exception)
+            {
+                NewItem.AverageSales = 0;
+            }
+            if (NewItem.AverageSales != 0)
+            {
+                NewItem.WeeksRemaining = Math.Round(Convert.ToDouble(NewItem.StockLevel / NewItem.AverageSales),1);
+            }
+            else
+            {
+                NewItem.WeeksRemaining = 999;
+            }
+           
+            foreach (SKUSupplier supp in sku.Suppliers)
+            {
+                if (!supp.Primary) continue;
+                NewItem.SupplierCode = supp.ReOrderCode;
+            }
+
+            return NewItem;
+        }
 
         public List<DataItemDetails> Packsizes
         {
@@ -150,7 +215,7 @@ namespace ReorderWPF.Pages
                 var PacksizeList = new List<DataItemDetails>();
                 foreach (WhlSKU Pack in this.Children)
                 {
-                    var newitem = new DataItemDetails(Pack);
+                    DataItemDetails newitem = DataItemDetails.NewDataItemDetails(Pack);
                     PacksizeList.Add(newitem);
                 }
                 return PacksizeList;
@@ -163,12 +228,20 @@ namespace ReorderWPF.Pages
     public class DataItemDetails
     {
         public string ShortSku { get; set; }
+        public int Sales { get; set; }
+        public Single Retail { get; set; }
         public string Packsize { get; set; }
-        public Single WeeksLeft { get; set; }
+        public double WeeksLeft { get; set; }
 
-        public DataItemDetails(WhlSKU item)
+        public static DataItemDetails NewDataItemDetails(WhlSKU sku)
         {
-            
+            var Item = new DataItemDetails();
+            Item.ShortSku = sku.ShortSku;
+            Item.Sales = Convert.ToInt32(sku.SalesData.EightWeekAverage);
+            Item.Packsize = sku.PackSize.ToString();
+            if (Item.Sales != 0) Item.WeeksLeft = Math.Round(Convert.ToDouble(sku.Stock.Level / Item.Sales), 1);
+            else Item.WeeksLeft = 999;
+            return Item;
         }
     }
 }

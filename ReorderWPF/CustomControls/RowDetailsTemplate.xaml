@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ReorderWPF.CustomControls"
              xmlns:oxy="http://oxyplot.org/wpf"
+             xmlns:pages="clr-namespace:ReorderWPF.Pages"
              mc:Ignorable="d" Height="388.127" Width="966.51" Background="White">
     <Grid>
         <Grid.RowDefinitions>
@@ -20,9 +21,9 @@
                     <ColumnDefinition Width="113*"/>
                     <ColumnDefinition Width="74*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="ItemName" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="16" Margin="0,8"/>
-                <TextBlock x:Name="Locations" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                <TextBlock x:Name="SupplierCodeText" Grid.Column="2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                <TextBlock x:Name="ItemName" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Margin="2,8,0,8" Text="{Binding ItemName}" Background="{x:Null}"/>
+                <TextBlock x:Name="Locations" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Text ="{Binding Locations}" FontSize="18" Margin="4,0,0,0"/>
+                <TextBlock x:Name="SupplierCodeText" Grid.Column="2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding SupplierCode}" Margin="4,0,0,0" FontSize="18"/>
             </Grid>
         </Grid>
         <Grid Grid.Row="2">
@@ -35,8 +36,17 @@
                 <RowDefinition Height="140*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="1">
-                <DataGrid x:Name="PacksizeDatagrid"/>
+                <DataGrid x:Name="PacksizeDatagrid" IsReadOnly="True" SelectionMode="Single">
+                    <DataGrid.DataContext>
+                        <pages:DataItemDetails/>
+                    </DataGrid.DataContext>
+                    <DataGridTextColumn Header="Pack" Binding="{Binding Packsize}" />
+                    <DataGridTextColumn Header="Sales" Binding="{Binding Sales}" />
+                    <DataGridTextColumn Header="Weeks" Binding="{Binding WeeksLeft}" />
+                    <DataGridTextColumn Header="Retail" Binding="{Binding Retail}" />
+                </DataGrid>
             </Grid>
+            <Grid/>
         </Grid>
 
     </Grid>
