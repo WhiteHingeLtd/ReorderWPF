@@ -41,6 +41,7 @@ namespace ReorderWPF.Pages
         private bool LoadDiscontinued = false;
         private bool LoadUnlisted = false;
         private bool LoadNoSales = false;
+        private bool LoadPrimaryOnly = false;
         public SupplierData(MainWindow Main, Supplier SupplierCode)
         {
             InitializeComponent();
@@ -84,7 +85,7 @@ namespace ReorderWPF.Pages
                     ListOfUnloadedSkus.Add(sku);
                     return;
                 }
-                
+                if (sku.GetPrimarySupplier().Name != _currentSupplier.Code && LoadPrimaryOnly == true) return;
                 
                 
                 var newItem = DataItem.DataItemNew(sku);
@@ -122,6 +123,8 @@ namespace ReorderWPF.Pages
                 else LoadUnlisted = false;
                 if (NoSalesCheck.IsChecked == true)  LoadNoSales = true;
                 else LoadNoSales = false;
+                if (PrimaryOnlyCheck.IsChecked == true) LoadPrimaryOnly = true;
+                else LoadPrimaryOnly = false;
             }
             catch (Exception e)
             {
