@@ -58,6 +58,12 @@ namespace ReorderWPF
             HomeRef.Data_Employees = new EmployeeCollection();
             Worker.ReportProgress(0, "Loading Supplier Collection");
             HomeRef.SupplierCollection = new SupplierCollection();
+            HomeRef.SupplierCollection.SortItemsBySupplier(null,null,HomeRef.DataSkus);
+            foreach (Supplier Supp in HomeRef.SupplierCollection)
+            {
+                Worker.ReportProgress(0,"Mixing " + Supp.Name);
+                Supp.MakeMixdown();
+            }
             Thread.Sleep(20);
             Worker.ReportProgress(0, "Preparing Authentication");
             HomeRef.User_Employee = new AuthClass();

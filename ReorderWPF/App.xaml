@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ReorderWPF.CustomControls"
              xmlns:pages="clr-namespace:ReorderWPF.Pages"
+             xmlns:oxy="http://oxyplot.org/wpf"
              StartupUri="MainWindow.xaml" DispatcherUnhandledException="Application_DispatcherUnhandledException">
     <Application.Resources>
         <Style TargetType="{x:Type local:ThreadedPage}">
@@ -35,9 +36,9 @@
         <DataTemplate x:Key="ItemDataTemplate">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="77*"/>
-                    <RowDefinition Height="37*"/>
-                    <RowDefinition Height="209*"/>
+                    <RowDefinition Height="240"/>
+                    <RowDefinition Height="34*"/>
+                    <RowDefinition Height="281*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="1">
 
@@ -73,7 +74,11 @@
                         </DataGrid>
                     </Grid>
                 </Grid>
+                <Grid>
+                    <oxy:PlotView x:Name="RowDetailsPlotView">
 
+                    </oxy:PlotView>
+                </Grid>
             </Grid>
         </DataTemplate>
     </Application.Resources>

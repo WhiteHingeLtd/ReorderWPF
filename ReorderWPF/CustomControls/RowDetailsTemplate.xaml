@@ -6,13 +6,14 @@
              xmlns:local="clr-namespace:ReorderWPF.CustomControls"
              xmlns:oxy="http://oxyplot.org/wpf"
              xmlns:pages="clr-namespace:ReorderWPF.Pages"
-             mc:Ignorable="d" Height="388.127" Width="966.51" Background="White">
+             mc:Ignorable="d" Height="555.127" Width="1055.51" Background="White">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="77*"/>
-            <RowDefinition Height="37*"/>
-            <RowDefinition Height="209*"/>
+            <RowDefinition Height="240"/>
+            <RowDefinition Height="34*"/>
+            <RowDefinition Height="281*"/>
         </Grid.RowDefinitions>
+
         <Grid Grid.Row="1">
 
             <Grid>
@@ -47,6 +48,23 @@
                 </DataGrid>
             </Grid>
             <Grid/>
+            <Grid Grid.Column="1" Grid.RowSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="124*"/>
+                    <RowDefinition Height="157*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="417*"/>
+                    <ColumnDefinition Width="221*"/>
+                </Grid.ColumnDefinitions>
+                <RichTextBox x:Name="DeliveryNoteRtf" Grid.Column="1" Margin="0,0,0,26">
+                    <FlowDocument/>
+                </RichTextBox>
+                <Button Content="Save Notes" Grid.Column="1" Margin="0,98,0,0" Click="Button_Click" MinHeight="26"/>
+            </Grid>
+        </Grid>
+        <Grid>
+            <oxy:PlotView x:Name="RowDetailsPlotView"/>
         </Grid>
 
     </Grid>
