@@ -65,7 +65,11 @@ namespace ReorderWPF.Pages
         private void LoadSupplierData()
         {
             CurrentReorderSupplier = new ReorderSupplier(_currentSupplier, SupplierSkuCollectionFull);
-
+            LastOrderDateBlock.Text = CurrentReorderSupplier.LastOrder.ToShortDateString();
+            LeadDaysTextBox.Text = CurrentReorderSupplier.LeadDays.ToString();
+            if (CurrentReorderSupplier.CartonDiscount) CartonDiscount.Text = "Yes";
+            else CartonDiscount.Text = "No";
+            ReorderPercentageTextBox.Text = Convert.ToString((CurrentReorderSupplier.ReorderAtPercentage) * 100) + "%";
 
         }
 

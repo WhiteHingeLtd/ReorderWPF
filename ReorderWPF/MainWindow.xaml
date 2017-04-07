@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Name="RibbonWindow"
         Width="973" Height="729"
-        x:Class="ReorderWPF.MainWindow" Title="Reorder Assistant" Foreground="#FFC10000" Margin="0" Padding="0,10,0,0" ResizeMode="CanResizeWithGrip" Loaded="Window_Loaded" Initialized="Window_Initialized" Closing="RibbonWindow_Closing" WindowState="Maximized">
+        x:Class="ReorderWPF.MainWindow" Title="Reorder Assistant" Foreground="#FFC10000" Margin="0" Padding="0,10,0,0" ResizeMode="CanResizeWithGrip" Loaded="Window_Loaded" Initialized="Window_Initialized" Closing="RibbonWindow_Closing" WindowState="Maximized" Icon="icon_410_1.png">
 
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>

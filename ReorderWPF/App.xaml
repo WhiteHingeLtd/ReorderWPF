@@ -48,9 +48,9 @@
                             <ColumnDefinition Width="113*"/>
                             <ColumnDefinition Width="74*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="ItemName" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Margin="2,8,0,8" Text="{Binding ItemName}" Background="{x:Null}"/>
-                        <TextBlock x:Name="Locations" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Text ="{Binding Locations}" FontSize="18" Margin="4,0,0,0"/>
-                        <TextBlock x:Name="SupplierCodeText" Grid.Column="2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding SupplierCode}" Margin="4,0,0,0" FontSize="18"/>
+                        <TextBlock x:Name="ItemName" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Margin="2,8,0,8" Text="{Binding ItemName}" Background="{x:Null}" FontWeight="Bold" TextDecorations="Underline"/>
+                        <TextBlock x:Name="Locations" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Text ="{Binding Locations}" FontSize="18" Margin="4,0,0,0" FontWeight="Bold" TextDecorations="Underline"/>
+                        <TextBlock x:Name="SupplierCodeText" Grid.Column="2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding SupplierCode}" Margin="4,0,0,0" FontSize="18" FontWeight="Bold" TextDecorations="Underline"/>
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="2">
@@ -82,10 +82,10 @@
                             <ColumnDefinition Width="417*"/>
                             <ColumnDefinition Width="221*"/>
                         </Grid.ColumnDefinitions>
-                        <RichTextBox x:Name="DeliveryNoteRtf" Grid.Column="1" Margin="0,0,0,26">
+                        <RichTextBox x:Name="DeliveryNoteRtf" Grid.Column="1" Margin="0,0,0,26" Visibility="Collapsed">
                             <FlowDocument/>
                         </RichTextBox>
-                        <Button Content="Save Notes" Grid.Column="1" Margin="0,98,0,0" MinHeight="26"/>
+                        <Button Content="Save Notes" Grid.Column="1" Margin="0,98,0,0" MinHeight="26" Visibility="Collapsed"/>
                     </Grid>
                 </Grid>
                 <Grid>
