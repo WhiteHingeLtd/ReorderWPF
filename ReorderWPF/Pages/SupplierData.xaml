@@ -52,7 +52,29 @@
                 <CheckBox x:Name="PrimaryOnlyCheck" Content="Primary Only" Grid.Column="1" HorizontalAlignment="Left" Margin="0,129,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" IsChecked="True"/>
             </Grid>
             <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35*"/>
+                    <RowDefinition Height="146*"/>
+                </Grid.RowDefinitions>
                 <TextBlock x:Name="SupplierNameBlock" HorizontalAlignment="Center" TextWrapping="Wrap" Text="C-TIE" VerticalAlignment="Top" FontSize="26"/>
+                <Grid Grid.Row="1" Margin="0,0,456,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="54*"/>
+                        <ColumnDefinition Width="47*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock TextWrapping="Wrap" Text="Last Order:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" TextDecorations="Underline"/>
+                    <Button Content="Show" Margin="85,0,0,126" Grid.Column="1"/>
+                    <TextBlock x:Name="LastOrderDateBlock" HorizontalAlignment="Left" Margin="0,1,0,0" TextWrapping="Wrap" Text="01/01/17" VerticalAlignment="Top" FontSize="14" Grid.Column="1"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="0,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextDecorations="Underline" FontSize="14"><Run Text="Reorder Weeks"/><Run Text=":"/></TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Margin="0,48,0,0" TextWrapping="Wrap" Text="Recommended Weeks:" VerticalAlignment="Top" FontSize="14" TextDecorations="Underline"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="0,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextDecorations="Underline"><Run Text="Minimum"/><Run Text=" "/><Run Text="Order"/><Run Text=":"/></TextBlock>
+                    <TextBox x:Name="ReorderWeeksBox" HorizontalAlignment="Left" Height="19" Margin="0,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" MaxLines="1" TextChanged="ReorderWeeksBox_TextChanged" Grid.Column="1"/>
+                    <TextBox x:Name="RecommendedWeeks" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="0,47,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" MaxLines="1"/>
+                    <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="0,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                </Grid>
             </Grid>
         </Grid>
         <DataGrid x:Name="SupplierDataGrid" Grid.Row="1" CanUserReorderColumns="False" Margin="0,10" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True" RowDetailsVisibilityChanged="SupplierDataGrid_RowDetailsVisibilityChanged" RowDetailsTemplate="{DynamicResource ItemDataTemplate}">
@@ -60,6 +82,7 @@
                 <local:DataItem/>
             </DataGrid.DataContext>
             <DataGrid.Columns>
+                
                 <DataGridTextColumn Header="Sku" Binding="{Binding Sku}" />
                 <DataGridTextColumn Header="Item Name" Binding="{Binding ItemName}" />
                 <DataGridTextColumn Header="Weeks" Binding="{Binding WeeksRemaining}" />
@@ -68,7 +91,13 @@
                 <DataGridTextColumn Header="Level" Binding="{Binding StockLevel}" />
                 <DataGridTextColumn Header="Recommended" Binding="{Binding RecommendedToOrder}" />
             </DataGrid.Columns>
-
+            <!--<Style TargetType="{x:Type DataGridCell}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding AverageSales}" Value="0" >
+                        <Setter Property="Foreground" Value="Green" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>-->
 
         </DataGrid>
     </Grid>

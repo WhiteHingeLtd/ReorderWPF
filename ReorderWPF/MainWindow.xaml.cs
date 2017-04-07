@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using WHLClasses;
@@ -225,6 +226,44 @@ namespace ReorderWPF
                 MySQL.insertUpdate("DELETE FROM whldata.reorder_orders WHERE OrderGUID = '" + CurrentOrder.OrderGuid.ToString() + "'");
                // MySQL.insertUpdate(@"INSERT INTO whldata.reorder_orders (OrderGUID, SupplierCode, CustomOrderID, OrderDate, OrderDelivered, OrderInvoiced, LinesOfStock, NetValue, CustomOrderNote, CustomDeliveryNote,OrderState)
                 //                    VALUES ('"+ CurrentOrder.OrderGuid+ "','" + CurrentOrder.SupplierCode + "','"
+            }
+        }
+    }
+
+    public class ReorderSupplier
+    {
+        public string Code;
+        public string FullName;
+        public SkuCollection Children;
+        public double MinimumOrder;
+        public int LeadDays;
+        public bool CartonDiscount;
+        public double ReorderAtPercentage;
+        public DateTime LastOrder;
+        public Guid LastOrderGuid;
+
+        public ReorderSupplier(Supplier CurrentSupplier, SkuCollection FullSkuCollection)
+        {
+            var Query = MSSQLPublic.SelectDataDictionary("SELECT TOP 1 * from whldata.reorder_supplierdata WHERE SupplierCode='" + CurrentSupplier.Code + "';");
+            foreach (Dictionary<string, object> result in Query)
+            {
+                Code = result["SupplierCode"].ToString();
+                FullName = result["SupplierFullName"].ToString();
+                Children = FullSkuCollection.SearchBySuppName(Code);
+                try
+                {
+                    MinimumOrder = Convert.ToDouble(result["MinimumOrder"]);
+                }
+                catch (NullReferenceException)
+                {
+                    MinimumOrder = 0;                   
+                }
+                int CheckForDiscount = Convert.ToInt32(result["CartonDiscount"]);
+                if (CheckForDiscount == 1) CartonDiscount = true;
+                else CartonDiscount = false;
+                ReorderAtPercentage = Convert.ToDouble(result["ReorderPercentage"]);
+                if (result["LastOrder"] != DBNull.Value) LastOrder = DateTime.Parse(result["LastOrder"].ToString());
+                if (result["LastOrderGuid"] != DBNull.Value) LastOrderGuid = new Guid(result["LastOrderGuid"].ToString());
             }
         }
     }

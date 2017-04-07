@@ -32,6 +32,7 @@ namespace ReorderWPF.Pages
         private List<DataItemDetails> CurrentPacksizes = new List<DataItemDetails>();
         private SupplierOrderData CurrentSupplierOrder = new SupplierOrderData();
         private DataItem CurrentSelectedItem = new DataItem();
+        private ReorderSupplier CurrentReorderSupplier = null;
 
         private ConcurrentBag<WhlSKU> ListOfUnloadedSkus = new ConcurrentBag<WhlSKU>();
         internal ObservableCollection<DataItemDetails> CurrentSelectedPacksizes = new ObservableCollection<DataItemDetails>();
@@ -63,7 +64,9 @@ namespace ReorderWPF.Pages
 
         private void LoadSupplierData()
         {
-            
+            CurrentReorderSupplier = new ReorderSupplier(_currentSupplier, SupplierSkuCollectionFull);
+
+
         }
 
         internal override void TabClosing(ref bool cancel)
@@ -91,7 +94,7 @@ namespace ReorderWPF.Pages
                 var newItem = DataItem.DataItemNew(sku);
                 
                 SupplierDataBag.Add(newItem);
-                Worker.ReportProgress(SupplierDataBag.Count / CurrentColl.Count);
+                Worker.ReportProgress((SupplierDataBag.Count / CurrentColl.Count)*100);
             });
             SupplierDataList.AddRange(SupplierDataBag);
         }
@@ -368,6 +371,11 @@ namespace ReorderWPF.Pages
                 }
             }
             return null;
+        }
+
+        private void ReorderWeeksBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 
