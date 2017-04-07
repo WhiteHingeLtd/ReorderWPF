@@ -37,7 +37,7 @@
                 <RowDefinition Height="140*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="1">
-                <DataGrid x:Name="PacksizeDatagrid" IsReadOnly="True" SelectionMode="Single">
+                <DataGrid x:Name="PacksizeDatagrid" IsReadOnly="True" SelectionMode="Single" Visibility="Collapsed">
                     <DataGrid.DataContext>
                         <pages:DataItemDetails/>
                     </DataGrid.DataContext>

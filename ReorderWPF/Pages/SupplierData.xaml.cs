@@ -32,6 +32,8 @@ namespace ReorderWPF.Pages
         private List<DataItemDetails> CurrentPacksizes = new List<DataItemDetails>();
         private SupplierOrderData CurrentSupplierOrder = new SupplierOrderData();
         private DataItem CurrentSelectedItem = new DataItem();
+
+        private ConcurrentBag<WhlSKU> ListOfUnloadedSkus = new ConcurrentBag<WhlSKU>();
         internal ObservableCollection<DataItemDetails> CurrentSelectedPacksizes = new ObservableCollection<DataItemDetails>();
 
         private bool LoadLowStock = false;
@@ -39,6 +41,7 @@ namespace ReorderWPF.Pages
         private bool LoadDiscontinued = false;
         private bool LoadUnlisted = false;
         private bool LoadNoSales = false;
+        private bool LoadPrimaryOnly = false;
         public SupplierData(MainWindow Main, Supplier SupplierCode)
         {
             InitializeComponent();
@@ -47,7 +50,9 @@ namespace ReorderWPF.Pages
             _currentSupplier = SupplierCode;
             SupplierSkuCollectionFull = Main.DataSkus;
             _supplierSkuCollection = Main.DataSkusMixDown;
-            
+            LoadSupplierData();
+
+            SupplierNameBlock.Text = SupplierCode.Name;
             Stopwatch asd = new Stopwatch();
             asd.Start();
             Misc.OperationDialog("Preparing " + SupplierCode.Name,PrepareDataGrid);
@@ -55,6 +60,12 @@ namespace ReorderWPF.Pages
             Console.WriteLine(asd.ElapsedMilliseconds.ToString());
             RenderDataGrid();
         }
+
+        private void LoadSupplierData()
+        {
+            
+        }
+
         internal override void TabClosing(ref bool cancel)
         {
             cancel = false;
@@ -69,7 +80,16 @@ namespace ReorderWPF.Pages
             var SupplierDataBag = new ConcurrentBag<DataItem>();
             Parallel.ForEach(CurrentColl, (sku) =>
             {
+                if (Int32.Parse(sku.SalesData.EightWeekAverage.ToString()) == 0 && LoadNoSales != true)
+                {
+                    ListOfUnloadedSkus.Add(sku);
+                    return;
+                }
+                if (sku.GetPrimarySupplier().Name != _currentSupplier.Code && LoadPrimaryOnly == true) return;
+                
+                
                 var newItem = DataItem.DataItemNew(sku);
+                
                 SupplierDataBag.Add(newItem);
                 Worker.ReportProgress(SupplierDataBag.Count / CurrentColl.Count);
             });
@@ -103,6 +123,8 @@ namespace ReorderWPF.Pages
                 else LoadUnlisted = false;
                 if (NoSalesCheck.IsChecked == true)  LoadNoSales = true;
                 else LoadNoSales = false;
+                if (PrimaryOnlyCheck.IsChecked == true) LoadPrimaryOnly = true;
+                else LoadPrimaryOnly = false;
             }
             catch (Exception e)
             {
@@ -308,21 +330,21 @@ namespace ReorderWPF.Pages
                 Grid asd = e.DetailsElement as Grid;
                 DataGrid asd1 = FindVisualChild<DataGrid>(asd);
                 PlotView Model1 = FindVisualChild<PlotView>(asd);
-                Model1.Model = (e.Row.Item as DataItem).SalesGraph;
+                try
+                {
+                    Model1.Model = (e.Row.Item as DataItem).SalesGraph;
+                }
+                catch (Exception exception)
+                {
+                    Model1.Visibility = Visibility.Collapsed;
+                    Console.WriteLine(exception);
+                }
+                
                 CurrentSelectedPacksizes.Clear();
                 foreach (DataItemDetails Pack in ((e.Row.Item) as DataItem).Packsizes)
                 {
                     CurrentSelectedPacksizes.Add(Pack);
                 }
-                asd1.DataContext = CurrentSelectedPacksizes;
-                DataGridTextColumn PacksizeColumn = new DataGridTextColumn();
-                PacksizeColumn.Binding = new Binding("Packsize");
-                PacksizeColumn.Header = "Packsize";
-                asd1.Items.Add(PacksizeColumn);
-
-
-
-
 
 
 
@@ -361,7 +383,7 @@ namespace ReorderWPF.Pages
         public int InnerCarton { get; set; }
         public int OuterCarton { get; set; }
         public int NumOnOrder { get; set; }
-        public Single NetOrderPrice { get; set; }
+        public float NetOrderPrice { get; set; }
         public WhlSKU SkuData { get; set; }
         public PlotModel SalesGraph { get; set; }
 
@@ -606,7 +628,7 @@ namespace ReorderWPF.Pages
     {
         public string ShortSku { get; set; }
         public int Sales { get; set; }
-        public Single Retail { get; set; }
+        public float Retail { get; set; }
         public string Packsize { get; set; }
         public double WeeksLeft { get; set; }
 

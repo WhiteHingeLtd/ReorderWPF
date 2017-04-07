@@ -40,8 +40,7 @@ namespace ReorderWPF.Pages
 
         internal override void TabClosing(ref bool cancel)
         {
-            cancel = false;
-            
+            cancel = false; 
 
         }
 

@@ -63,7 +63,7 @@
                         <RowDefinition Height="140*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="1">
-                        <DataGrid x:Name="PacksizeDatagrid" IsReadOnly="True" SelectionMode="Single">
+                        <DataGrid x:Name="PacksizeDatagrid" IsReadOnly="True" SelectionMode="Single" Visibility="Collapsed">
                             <DataGrid.DataContext>
                                 <pages:DataItemDetails/>
                             </DataGrid.DataContext>
@@ -72,6 +72,20 @@
                             <DataGridTextColumn Header="Weeks" Binding="{Binding WeeksLeft}" />
                             <DataGridTextColumn Header="Retail" Binding="{Binding Retail}" />
                         </DataGrid>
+                    </Grid>
+                    <Grid Grid.Column="1" Grid.RowSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="124*"/>
+                            <RowDefinition Height="157*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="417*"/>
+                            <ColumnDefinition Width="221*"/>
+                        </Grid.ColumnDefinitions>
+                        <RichTextBox x:Name="DeliveryNoteRtf" Grid.Column="1" Margin="0,0,0,26">
+                            <FlowDocument/>
+                        </RichTextBox>
+                        <Button Content="Save Notes" Grid.Column="1" Margin="0,98,0,0" MinHeight="26"/>
                     </Grid>
                 </Grid>
                 <Grid>

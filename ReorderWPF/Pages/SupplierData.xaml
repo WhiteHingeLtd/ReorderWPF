@@ -19,9 +19,9 @@
         </Grid.RowDefinitions>
         <Grid x:Name="SupplierDetailsGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="167*"/>
-                <ColumnDefinition Width="594*"/>
-                <ColumnDefinition Width="183*"/>
+                <ColumnDefinition Width="185*"/>
+                <ColumnDefinition Width="586*"/>
+                <ColumnDefinition Width="202*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
@@ -34,6 +34,7 @@
                 <TextBlock x:Name="NetOrderTotal" HorizontalAlignment="Left" Margin="10,80,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Net: £45215.29" VerticalAlignment="Top" FontSize="14" Height="19"/>
                 <TextBlock x:Name="TotalItemsCurrentOrder" HorizontalAlignment="Left" Margin="10,56,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Items: 9001" VerticalAlignment="Top" FontSize="14"/>
                 <TextBlock x:Name="GrossCurrentOrder" HorizontalAlignment="Left" Margin="10,104,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Gross: £15000" VerticalAlignment="Top" FontSize="14"/>
+                <Button Content="Order Complete" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Bottom" FontSize="16"/>
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -42,13 +43,16 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Options" VerticalAlignment="Top" FontStyle="Italic" FontSize="18" Grid.Column="1" Margin="48,0" Grid.ColumnSpan="2"/>
-                <CheckBox x:Name="LowStockCheck" Content="Low Stock" HorizontalAlignment="Left" Margin="0,29,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <CheckBox x:Name="SupplierLowCheck" Content="Supplier Low" Grid.Column="1" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <CheckBox x:Name="LowStockCheck" Content="Low Stock" HorizontalAlignment="Left" Margin="0,29,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="2" IsChecked="True"/>
+                <CheckBox x:Name="SupplierLowCheck" Content="Supplier Low" Grid.Column="1" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" IsChecked="True"/>
                 <CheckBox x:Name="DiscontCheck" Content="Discontinued" Grid.Column="1" HorizontalAlignment="Left" Margin="0,69,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                 <CheckBox x:Name="UnlistedCheck" Content="New (Unlisted)" Grid.Column="1" HorizontalAlignment="Left" Margin="0,89,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                <CheckBox x:Name="NoSalesCheck" Content="No Sales" Grid.Column="1" HorizontalAlignment="Left" Margin="0,109,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                <Button x:Name="RefreshButton" Content="Refresh Items" Grid.Column="1" HorizontalAlignment="Center" Margin="34,0,48,0" Click="RefreshButton_Click" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
-                <CheckBox x:Name="PrimaryOnlyCheck" Content="Primary Only" Grid.Column="1" HorizontalAlignment="Left" Margin="0,129,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <CheckBox x:Name="NoSalesCheck" Content="No Sales" Grid.Column="1" HorizontalAlignment="Left" Margin="0,109,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" IsChecked="True"/>
+                <Button x:Name="RefreshButton" Content="Refresh Items" Grid.Column="1" HorizontalAlignment="Center" Margin="48,161,62,0" Click="RefreshButton_Click" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Top"/>
+                <CheckBox x:Name="PrimaryOnlyCheck" Content="Primary Only" Grid.Column="1" HorizontalAlignment="Left" Margin="0,129,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" IsChecked="True"/>
+            </Grid>
+            <Grid Grid.Column="1">
+                <TextBlock x:Name="SupplierNameBlock" HorizontalAlignment="Center" TextWrapping="Wrap" Text="C-TIE" VerticalAlignment="Top" FontSize="26"/>
             </Grid>
         </Grid>
         <DataGrid x:Name="SupplierDataGrid" Grid.Row="1" CanUserReorderColumns="False" Margin="0,10" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True" RowDetailsVisibilityChanged="SupplierDataGrid_RowDetailsVisibilityChanged" RowDetailsTemplate="{DynamicResource ItemDataTemplate}">
