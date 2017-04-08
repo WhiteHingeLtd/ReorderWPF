@@ -64,7 +64,7 @@ namespace ReorderWPF.Pages
 
         internal override void TabClosing(ref bool cancel)
         {
-            MessageBoxResult asd = MessageBox.Show("Are you sure","Close Application",MessageBoxButton.YesNo);
+            MessageBoxResult asd = MessageBox.Show("Are you sure","Close Application",MessageBoxButton.YesNoCancel);
             if (asd == MessageBoxResult.No)
             {
                 cancel = true;

@@ -66,13 +66,13 @@
                         <ColumnDefinition Width="47*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock TextWrapping="Wrap" Text="Last Order:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" TextDecorations="Underline"/>
-                    <Button Content="Show" Margin="72,0,0,146" Grid.Column="1"/>
+                    <Button x:Name="ShowLastOrderButton" Content="Show" Margin="72,0,0,146" Grid.Column="1" HorizontalAlignment="Left" Width="48"/>
                     <TextBlock x:Name="LastOrderDateBlock" HorizontalAlignment="Left" Margin="0,1,0,0" TextWrapping="Wrap" Text="01/01/17" VerticalAlignment="Top" FontSize="14" Grid.Column="1"/>
                     <TextBlock HorizontalAlignment="Left" Margin="0,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextDecorations="Underline" FontSize="14"><Run Text="Reorder Weeks"/><Run Text=":"/></TextBlock>
                     <TextBlock HorizontalAlignment="Left" Margin="0,48,0,0" TextWrapping="Wrap" Text="Recommended Weeks:" VerticalAlignment="Top" FontSize="14" TextDecorations="Underline"/>
                     <TextBlock HorizontalAlignment="Left" Margin="0,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextDecorations="Underline"><Run Text="Minimum"/><Run Text=" "/><Run Text="Order"/><Run Text=":"/></TextBlock>
-                    <TextBox x:Name="ReorderWeeksBox" HorizontalAlignment="Left" Height="19" Margin="0,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" MaxLines="1" TextChanged="ReorderWeeksBox_TextChanged" Grid.Column="1"/>
-                    <TextBox x:Name="RecommendedWeeks" Grid.Column="1" Margin="0,47,0,102" TextWrapping="Wrap" MaxLines="1"/>
+                    <TextBox x:Name="ReorderWeeksBox" HorizontalAlignment="Left" Height="19" Margin="0,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" MaxLines="1" Grid.Column="1"/>
+                    <TextBox x:Name="RecommendedWeeks" Grid.Column="1" Margin="0,47,0,102" TextWrapping="Wrap" MaxLines="1" HorizontalAlignment="Left" Width="120"/>
                     <TextBox x:Name="MinimumOrderTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="18" Margin="0,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
                     <TextBox x:Name="LeadDaysTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="18" Margin="0,97,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
                     <TextBlock HorizontalAlignment="Left" Margin="0,96,0,0" TextWrapping="Wrap" Text="Lead Days:" VerticalAlignment="Top" FontSize="14" TextDecorations="Underline"/>

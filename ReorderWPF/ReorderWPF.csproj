@@ -109,6 +109,11 @@
     <Compile Include="Dialogs\SearchOptionsDialog.xaml.cs">
       <DependentUpon>SearchOptionsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\SkuOrderHistory.xaml.cs">
+      <DependentUpon>SkuOrderHistory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\DataItem.cs" />
+    <Compile Include="Pages\DataItemDetails.cs" />
     <Compile Include="Pages\ItemChart.xaml.cs">
       <DependentUpon>ItemChart.xaml</DependentUpon>
     </Compile>
@@ -119,6 +124,8 @@
     <Compile Include="Pages\SupplierData.xaml.cs">
       <DependentUpon>SupplierData.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ReorderDataLoader.cs" />
+    <Compile Include="ReorderSupplier.cs" />
     <Compile Include="Splash.xaml.cs">
       <DependentUpon>Splash.xaml</DependentUpon>
     </Compile>
@@ -130,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\SearchOptionsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\SkuOrderHistory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
