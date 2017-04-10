@@ -20,7 +20,7 @@ namespace ReorderWPF
     /// </summary>
     public partial class Splash : Window
     {
-        BackgroundWorker Worker = new BackgroundWorker();
+        private BackgroundWorker Worker = new BackgroundWorker();
         internal MainWindow HomeRef = null;
         internal void SplashLoad()
         {
@@ -37,7 +37,7 @@ namespace ReorderWPF
             {
                 Worker.ReportProgress(0, "Loading " + name.Name.ToString());
                 Thread.Sleep(25);
-                if (!AppDomain.CurrentDomain.GetAssemblies().Any((Assembly x) => x.FullName == name.FullName))
+                if (!AppDomain.CurrentDomain.GetAssemblies().Any(x => x.FullName == name.FullName))
                 {
                     LoadAssemblies(Assembly.Load(name));
                     Console.WriteLine(name.FullName);
@@ -96,7 +96,8 @@ namespace ReorderWPF
             }
             finally
             {
-                this.Close();
+                
+                Close();
             }
             
         }
