@@ -10,6 +10,7 @@ using System.Windows;
 using WHLClasses;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Media;
 using ReorderWPF.CustomControls;
 using OxyPlot.Wpf;
@@ -167,12 +168,27 @@ namespace ReorderWPF.Pages
         {
             if (CurrentSelectedItem != e.Row.Item)
             {
+                CurrentSelectedItem = e.Row.Item as DataItem;
                 Grid asd = e.DetailsElement as Grid;
                 DataGrid asd1 = FindVisualChild<DataGrid>(asd);
+                Button ViewHistoryButton = FindVisualChild<Button>(asd);
+                TextBox DeliveryNoteBox = FindVisualChild<TextBox>(asd);
+                if (ViewHistoryButton.Name == "ViewHistoryButton")
+                {
+                    ViewHistoryButton.Click += ViewHistor_Click;
+                }
+                else if (ViewHistoryButton.Name == "SaveDeliveryNotesButton")
+                {
+                    ViewHistoryButton.Click += SaveNotesClick;
+
+                }
+                
                 PlotView Model1 = FindVisualChild<PlotView>(asd);
                 try
                 {
                     Model1.Model = (e.Row.Item as DataItem).SalesGraph;
+                    DeliveryNoteBox.Text = (e.Row.Item as DataItem).SkuData.DeliveryNote;
+
                 }
                 catch (Exception exception)
                 {
@@ -181,17 +197,28 @@ namespace ReorderWPF.Pages
                 }
                 
                 CurrentSelectedPacksizes.Clear();
-                foreach (DataItemDetails Pack in ((e.Row.Item) as DataItem).Packsizes)
+                foreach (DataItemDetails Pack in (e.Row.Item as DataItem).Packsizes)
                 {
                     CurrentSelectedPacksizes.Add(Pack);
                 }
 
 
 
-                CurrentSelectedItem = e.Row.Item as DataItem;
+                
             }
 
         }
+
+        private void SaveNotesClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ViewHistor_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         public static childItem FindVisualChild<childItem>(DependencyObject obj)
             where childItem : DependencyObject
         {
@@ -221,6 +248,56 @@ namespace ReorderWPF.Pages
             T parent = ParentObject as T;
             if (parent != null) return parent;
             else return FindParent<T>(ParentObject); //Intentional Recursive method
+        }
+
+        public static T FindParentByName<T>(DependencyObject child, string Name) where T : DependencyObject
+        {
+            //get parent item
+            DependencyObject ParentObject = VisualTreeHelper.GetParent(child);
+
+            //we've reached the end of the tree
+            if (ParentObject == null) return null;
+
+            //check if the parent matches the type we're looking for
+            T parent = ParentObject as T;
+            if (parent != null) return parent;
+            else return FindParent<T>(ParentObject); //Intentional Recursive method
+        }
+
+        public TextBlock SelectSiblingTextBlockByName(DependencyObject Sibling, string Name)
+        {
+            var Parent = VisualTreeHelper.GetParent(Sibling) as Grid;
+            bool IsCorrect = false;
+            try
+            {
+                while (!IsCorrect)
+                {
+                    var TextBlock = FindVisualChild<TextBlock>(Parent);
+                    if (TextBlock == null) throw new NullReferenceException(); // reached the end of the tree
+
+                    if (TextBlock.Name == Name)
+                    {
+                        IsCorrect = true;
+                        return TextBlock;
+                    }
+                }
+               
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+            return null;
+        }
+
+        private void SaveDeliveryNotesButton_Click(object sender, RoutedEventArgs e)
+        {
+            var NoteBoxGrid = VisualTreeHelper.GetParent(sender as Button);
+            var tBox = FindVisualChild<TextBox>(NoteBoxGrid);
+           // var NotesToSave = SupplierDataGrid.RowDetailsTemplate.FindName("DeliveryNoteRtf", FindParent<RowDetailsTemplate>(sender as Button)) as TextBox;
+            CurrentSelectedItem.SkuData.DeliveryNote = tBox.Text;
+            CurrentSelectedItem.SkuData.SaveChanges(MainWindowRef.User_Employee.AuthenticatedUser);
         }
     }
 }

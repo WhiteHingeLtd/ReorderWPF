@@ -49,19 +49,34 @@
             <Grid Grid.Column="1" Grid.RowSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60*"/>
-                    <RowDefinition Height="221*"/>
+                    <RowDefinition Height="153*"/>
+                    <RowDefinition Height="68*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="101*"/>
-                    <ColumnDefinition Width="316*"/>
+                    <ColumnDefinition Width="122*"/>
+                    <ColumnDefinition Width="194*"/>
                     <ColumnDefinition Width="221*"/>
                 </Grid.ColumnDefinitions>
-                <RichTextBox x:Name="DeliveryNoteRtf" Grid.Column="2" Margin="0,0,0,183" Visibility="Collapsed" Grid.RowSpan="2">
-                    <FlowDocument/>
-                </RichTextBox>
-                <Button Content="Save Notes" Grid.Column="2" Margin="0,38,0,157" MinHeight="26" Visibility="Collapsed" Grid.Row="1"/>
+                <TextBox x:Name="DeliveryNoteRtf" Grid.Column="3" Margin="0,0,0,115" Grid.RowSpan="2" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                </TextBox>
+                <Button x:Name="SaveDeliveryNotesButton" Content="Save Notes" Grid.Column="3" Margin="0,38,0,89" MinHeight="26" Grid.Row="1"/>
                 <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Distinguish" VerticalAlignment="Top" FontSize="16"/>
-                <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Weeks Left" VerticalAlignment="Top" FontSize="16" Grid.Row="1"/>
+                <UniformGrid Margin="0,0,2,0" Grid.Row="1" Rows="5">
+                    <TextBlock TextWrapping="Wrap" Text="Weeks Left" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="15"/>
+                    <TextBlock TextWrapping="Wrap" Text="Sales" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="15"/>
+                    <TextBlock TextWrapping="Wrap" Text="Recommended" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="14"/>
+                    <TextBlock TextWrapping="Wrap" Text="Inner" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="15"/>
+                    <TextBlock TextWrapping="Wrap" Text="Outer" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="15" Margin="0,0,0,1"/>
+                </UniformGrid>
+                <TextBlock HorizontalAlignment="Center" Grid.Row="2" TextWrapping="Wrap" Text="Order" VerticalAlignment="Center" FontSize="20"/>
+                <UniformGrid Grid.Column="1" Grid.Row="1" Margin="5,0,0,0" Rows="5">
+                    <TextBlock TextWrapping="Wrap" Text="TextBlock" HorizontalAlignment="Right"/>
+                    <TextBlock TextWrapping="Wrap" Text="TextBlock" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock TextWrapping="Wrap" Text="TextBlock" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox TextWrapping="Wrap" Text="TextBox" Margin="10,5,10,6"/>
+                    <TextBox TextWrapping="Wrap" Text="TextBox" Margin="10,5"/>
+                </UniformGrid>
             </Grid>
         </Grid>
         <Grid Grid.Row="1">

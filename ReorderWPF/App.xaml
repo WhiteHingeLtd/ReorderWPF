@@ -73,7 +73,7 @@
                             <DataGridTextColumn Header="Retail" Binding="{Binding Retail}" />
                         </DataGrid>
                     </Grid>
-                    <Grid Grid.Column="1" Grid.RowSpan="2" Visibility="Collapsed">
+                    <Grid Grid.Column="1" Grid.RowSpan="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="60*"/>
                             <RowDefinition Height="221*"/>
@@ -83,10 +83,9 @@
                             <ColumnDefinition Width="316*"/>
                             <ColumnDefinition Width="221*"/>
                         </Grid.ColumnDefinitions>
-                        <RichTextBox x:Name="DeliveryNoteRtf" Grid.Column="2" Margin="0,0,0,183" Visibility="Visible" Grid.RowSpan="2">
-                            <FlowDocument/>
-                        </RichTextBox>
-                        <Button Content="Save Notes" Grid.Column="2" Margin="0,38,0,157" MinHeight="26" Visibility="Visible" Grid.Row="1"/>
+                        <TextBox x:Name="DeliveryNoteRtf" Grid.Column="2" Margin="0,0,0,183" Grid.RowSpan="2" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                        </TextBox>
+                        <Button x:Name="SaveDeliveryNotesButton" Content="Save Notes" Grid.Column="2" Margin="0,38,0,157" MinHeight="26" Grid.Row="1"/>
                         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Distinguish" VerticalAlignment="Top" FontSize="16"/>
                         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Weeks Left" VerticalAlignment="Top" FontSize="16" Grid.Row="1"/>
                     </Grid>

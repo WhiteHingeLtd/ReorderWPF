@@ -22,7 +22,8 @@ namespace ReorderWPF
     public partial class MainWindow : RibbonWindow
     {
         public EmployeeCollection Data_Employees;
-        internal WHLClasses.Authentication.AuthClass User_Employee;
+        public WHLClasses.Authentication.AuthClass User_Employee;
+        public static Employee AuthdEmployee;
         public SkuCollection DataSkus;
         internal SkuCollection DataSkusMixDown;
         internal SupplierCollection SupplierCollection;
@@ -30,6 +31,7 @@ namespace ReorderWPF
         public MainWindow()
         {
             InitializeComponent();
+            AuthdEmployee = User_Employee.AuthenticatedUser;
         }
 
         private void UpdateShellColor(object sender, PropertyChangedEventArgs e)

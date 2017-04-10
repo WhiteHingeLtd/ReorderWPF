@@ -83,7 +83,81 @@
                 </Grid>
             </Grid>
         </Grid>
-        <DataGrid x:Name="SupplierDataGrid" Grid.Row="1" CanUserReorderColumns="False" Margin="0,10" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True" RowDetailsVisibilityChanged="SupplierDataGrid_RowDetailsVisibilityChanged" RowDetailsTemplate="{DynamicResource ItemDataTemplate}">
+        <DataGrid x:Name="SupplierDataGrid" Grid.Row="1" CanUserReorderColumns="False" Margin="0,10" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True" RowDetailsVisibilityChanged="SupplierDataGrid_RowDetailsVisibilityChanged">
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="34*"/>
+                            <RowDefinition Height="240"/>
+                            <RowDefinition Height="281*"/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="145*"/>
+                                    <ColumnDefinition Width="113*"/>
+                                    <ColumnDefinition Width="74*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="ItemName" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Margin="2,8,0,8" Text="{Binding ItemName}" Background="{x:Null}" FontWeight="Bold" TextDecorations="Underline"/>
+                                <TextBlock x:Name="Locations" Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Text ="{Binding Locations}" FontSize="18" Margin="4,0,0,0" FontWeight="Bold" TextDecorations="Underline"/>
+                                <TextBlock x:Name="SupplierCodeText" Grid.Column="2" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding SupplierCode}" Margin="4,0,0,0" FontSize="18" FontWeight="Bold" TextDecorations="Underline"/>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="383*"/>
+                                <ColumnDefinition Width="584*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="111*"/>
+                                <RowDefinition Height="140*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="1">
+                                <DataGrid x:Name="PacksizeDatagrid" IsReadOnly="True" SelectionMode="Single" Visibility="Collapsed">
+                                    <DataGrid.DataContext>
+                                        <local:DataItemDetails/>
+                                    </DataGrid.DataContext>
+                                    <DataGridTextColumn Header="Pack" Binding="{Binding Packsize}" />
+                                    <DataGridTextColumn Header="Sales" Binding="{Binding Sales}" />
+                                    <DataGridTextColumn Header="Weeks" Binding="{Binding WeeksLeft}" />
+                                    <DataGridTextColumn Header="Retail" Binding="{Binding Retail}" />
+                                </DataGrid>
+                            </Grid>
+                            <Grid Grid.Column="1" Grid.RowSpan="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="60*"/>
+                                    <RowDefinition Height="153*"/>
+                                    <RowDefinition Height="68*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="101*"/>
+                                    <ColumnDefinition Width="316*"/>
+                                    <ColumnDefinition Width="221*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="DeliveryNoteRtf" Grid.Column="2" Margin="0,0,0,115" Grid.RowSpan="2" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                                </TextBox>
+                                <Button x:Name="SaveDeliveryNotesButton" Content="Save Notes" Grid.Column="2" Margin="0,38,0,89" MinHeight="26" Grid.Row="1"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Distinguish" VerticalAlignment="Top" FontSize="16"/>
+                                <UniformGrid Margin="1,0,0,0" Grid.Row="1" Rows="5">
+                                    <TextBlock TextWrapping="Wrap" Text="Weeks Left" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock TextWrapping="Wrap" Text="Sales" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock TextWrapping="Wrap" Text="Recommended" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock TextWrapping="Wrap" Text="Inner" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock TextWrapping="Wrap" Text="Outer" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="14"/>
+                                </UniformGrid>
+                                <TextBlock HorizontalAlignment="Center" Grid.Row="2" TextWrapping="Wrap" Text="Order" VerticalAlignment="Center" FontSize="20"/>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <oxy:PlotView x:Name="RowDetailsPlotView">
+
+                            </oxy:PlotView>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
             <DataGrid.DataContext>
                 <local:DataItem/>
             </DataGrid.DataContext>
