@@ -76,7 +76,15 @@ namespace ReorderWPF.Pages
                 if (!supp.Primary) continue;
                 NewItem.SupplierCode = supp.ReOrderCode;
             }
-            NewItem.SalesGraph = LoadChartData(sku);
+            try
+            {
+                NewItem.SalesGraph = LoadChartData(sku);
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e);
+            }
+            
             return NewItem;
         }
 
@@ -144,6 +152,7 @@ namespace ReorderWPF.Pages
                             WHERE a.shortsku = '" + Sku.SKU + @"'
                             ORDER BY StockDate ASC";
                 var QueryDict = MSSQLPublic.SelectData(query) as ArrayList;
+                if (QueryDict == null) throw new NullReferenceException();
                 List<DataPoint> StockHistoryPoints = new List<DataPoint>();
                 List<DataPoint> SalesHistoryPoints = new List<DataPoint>();
                 List<DataPoint> StockHistoryPoints2 = new List<DataPoint>();
@@ -258,7 +267,7 @@ namespace ReorderWPF.Pages
                 }
                 //leftAxis.IsZoomEnabled = false;
                 //leftAxis.AbsoluteMaximum = MaxSales;
-                //rightAxis.AbsoluteMaximum = MaxStock;
+                rightAxis.AbsoluteMaximum = MaxStock;
                 PlotArea.Axes.Add(BottomAxis);
                 PlotArea.Axes.Add(leftAxis);
                 PlotArea.Axes.Add(rightAxis);

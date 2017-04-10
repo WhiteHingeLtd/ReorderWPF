@@ -36,11 +36,11 @@
         <DataTemplate x:Key="ItemDataTemplate">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="240"/>
                     <RowDefinition Height="34*"/>
+                    <RowDefinition Height="240"/>
                     <RowDefinition Height="281*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="1">
+                <Grid>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -73,22 +73,25 @@
                             <DataGridTextColumn Header="Retail" Binding="{Binding Retail}" />
                         </DataGrid>
                     </Grid>
-                    <Grid Grid.Column="1" Grid.RowSpan="2">
+                    <Grid Grid.Column="1" Grid.RowSpan="2" Visibility="Collapsed">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="124*"/>
-                            <RowDefinition Height="157*"/>
+                            <RowDefinition Height="60*"/>
+                            <RowDefinition Height="221*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="417*"/>
+                            <ColumnDefinition Width="101*"/>
+                            <ColumnDefinition Width="316*"/>
                             <ColumnDefinition Width="221*"/>
                         </Grid.ColumnDefinitions>
-                        <RichTextBox x:Name="DeliveryNoteRtf" Grid.Column="1" Margin="0,0,0,26" Visibility="Collapsed">
+                        <RichTextBox x:Name="DeliveryNoteRtf" Grid.Column="2" Margin="0,0,0,183" Visibility="Visible" Grid.RowSpan="2">
                             <FlowDocument/>
                         </RichTextBox>
-                        <Button Content="Save Notes" Grid.Column="1" Margin="0,98,0,0" MinHeight="26" Visibility="Collapsed"/>
+                        <Button Content="Save Notes" Grid.Column="2" Margin="0,38,0,157" MinHeight="26" Visibility="Visible" Grid.Row="1"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Distinguish" VerticalAlignment="Top" FontSize="16"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Weeks Left" VerticalAlignment="Top" FontSize="16" Grid.Row="1"/>
                     </Grid>
                 </Grid>
-                <Grid>
+                <Grid Grid.Row="1">
                     <oxy:PlotView x:Name="RowDetailsPlotView">
 
                     </oxy:PlotView>

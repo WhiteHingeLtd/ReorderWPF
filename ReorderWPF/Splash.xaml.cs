@@ -40,6 +40,7 @@ namespace ReorderWPF
                 if (!AppDomain.CurrentDomain.GetAssemblies().Any((Assembly x) => x.FullName == name.FullName))
                 {
                     LoadAssemblies(Assembly.Load(name));
+                    Console.WriteLine(name.FullName);
                 }
 
             }
