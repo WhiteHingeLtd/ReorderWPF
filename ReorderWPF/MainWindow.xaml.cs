@@ -1,12 +1,8 @@
-﻿using ReorderWPF.UserControls;
-using System;
-using System.CodeDom;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using WHLClasses;

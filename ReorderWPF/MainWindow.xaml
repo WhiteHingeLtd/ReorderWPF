@@ -28,6 +28,7 @@
             <RibbonTab Header="Home">
                 <RibbonGroup Header="Tools" Margin="0,1" Width="136">
                     <RibbonButton Content="RibbonButton" Margin="0,0,-49,-23" RenderTransformOrigin="0.405,0.475" Click="RibbonButton_Click" LargeImageSource="Line-Chart-icon.png" SmallImageSource="Line-Chart-icon.png" Height="Auto" Label="Sales Charts"/>
+                    <RibbonButton Content="RibbonButton" HorizontalAlignment="Left" Margin="74,-39,-122,-15" LargeImageSource="icon_410_1.png" SmallImageSource="icon_410_1.png" Height="Auto" Label="Order Mgmt"/>
                 </RibbonGroup>
             </RibbonTab>
             <RibbonTab x:Name="WarehouseTab" Header="Warehouse" Visibility="Hidden">
