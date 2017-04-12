@@ -25,7 +25,7 @@ namespace ReorderWPF.CustomControls
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SaveDeliveryNotesButton_Click(object sender, RoutedEventArgs e)
         {
 
         }

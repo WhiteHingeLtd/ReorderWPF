@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using WHLClasses;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
 using ReorderWPF.CustomControls;
 using OxyPlot.Wpf;
@@ -169,21 +167,11 @@ namespace ReorderWPF.Pages
             if (CurrentSelectedItem != e.Row.Item)
             {
                 CurrentSelectedItem = e.Row.Item as DataItem;
-                Grid asd = e.DetailsElement as Grid;
-                DataGrid asd1 = FindVisualChild<DataGrid>(asd);
-                Button ViewHistoryButton = FindVisualChild<Button>(asd);
-                TextBox DeliveryNoteBox = FindVisualChild<TextBox>(asd);
-                if (ViewHistoryButton.Name == "ViewHistoryButton")
-                {
-                    ViewHistoryButton.Click += ViewHistor_Click;
-                }
-                else if (ViewHistoryButton.Name == "SaveDeliveryNotesButton")
-                {
-                    ViewHistoryButton.Click += SaveNotesClick;
+                var asd = e.DetailsElement as Grid;
+                var asd1 = FindVisualChild<DataGrid>(asd);
+                var DeliveryNoteBox = FindVisualChild<TextBox>(asd);
 
-                }
-                
-                PlotView Model1 = FindVisualChild<PlotView>(asd);
+                var Model1 = FindVisualChild<PlotView>(asd);
                 try
                 {
                     Model1.Model = (e.Row.Item as DataItem).SalesGraph;
@@ -209,16 +197,6 @@ namespace ReorderWPF.Pages
 
         }
 
-        private void SaveNotesClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void ViewHistor_Click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         public static childItem FindVisualChild<childItem>(DependencyObject obj)
             where childItem : DependencyObject
         {
@@ -239,7 +217,7 @@ namespace ReorderWPF.Pages
         public static T FindParent<T>(DependencyObject child) where T : DependencyObject
         {
             //get parent item
-            DependencyObject ParentObject = VisualTreeHelper.GetParent(child);
+            var ParentObject = VisualTreeHelper.GetParent(child);
 
             //we've reached the end of the tree
             if (ParentObject == null) return null;
@@ -253,15 +231,15 @@ namespace ReorderWPF.Pages
         public static T FindParentByName<T>(DependencyObject child, string Name) where T : DependencyObject
         {
             //get parent item
-            DependencyObject ParentObject = VisualTreeHelper.GetParent(child);
+            var parentObject = VisualTreeHelper.GetParent(child);
 
             //we've reached the end of the tree
-            if (ParentObject == null) return null;
+            if (parentObject == null) return null;
 
             //check if the parent matches the type we're looking for
-            T parent = ParentObject as T;
+            T parent = parentObject as T;
             if (parent != null) return parent;
-            else return FindParent<T>(ParentObject); //Intentional Recursive method
+            else return FindParent<T>(parentObject); //Intentional Recursive method
         }
 
         public TextBlock SelectSiblingTextBlockByName(DependencyObject Sibling, string Name)
@@ -290,14 +268,13 @@ namespace ReorderWPF.Pages
             }
             return null;
         }
-
-        private void SaveDeliveryNotesButton_Click(object sender, RoutedEventArgs e)
+        private void SaveDeliveryNotesButton_Click_1(object sender, RoutedEventArgs e)
         {
             var NoteBoxGrid = VisualTreeHelper.GetParent(sender as Button);
             var tBox = FindVisualChild<TextBox>(NoteBoxGrid);
-           // var NotesToSave = SupplierDataGrid.RowDetailsTemplate.FindName("DeliveryNoteRtf", FindParent<RowDetailsTemplate>(sender as Button)) as TextBox;
+            // var NotesToSave = SupplierDataGrid.RowDetailsTemplate.FindName("DeliveryNoteRtf", FindParent<RowDetailsTemplate>(sender as Button)) as TextBox;
             CurrentSelectedItem.SkuData.DeliveryNote = tBox.Text;
-            CurrentSelectedItem.SkuData.SaveChanges(MainWindowRef.User_Employee.AuthenticatedUser);
+            CurrentSelectedItem.SkuData.SetDeliveryNote(tBox.Text, MainWindowRef.User_Employee.AuthenticatedUser);
         }
     }
 }

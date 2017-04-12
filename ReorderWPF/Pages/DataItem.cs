@@ -166,56 +166,75 @@ namespace ReorderWPF.Pages
                 OxyPlot.Series.AreaSeries SalesAreaSeries = new OxyPlot.Series.AreaSeries();
                 var MaxStock = 0;
                 var MaxSales = 0;
-                try
+                if (QueryDict.Count != 0)
                 {
-                    BottomAxis.AbsoluteMinimum =
-                        Convert.ToDouble(DateTime.Parse((QueryDict[0] as ArrayList)[1].ToString()).ToOADate());
-                    BottomAxis.Minimum = Convert.ToDouble(DateTime.Parse((QueryDict[0] as ArrayList)[1].ToString())
-                        .ToOADate());
-                }
-                catch (Exception)
-                {
-                    BottomAxis.AbsoluteMinimum = Convert.ToDouble(startDate);
-                    BottomAxis.Minimum = Convert.ToDouble(startDate);
-                }
-
-                foreach (ArrayList Result in QueryDict)
-                {
-                    Double StockTotal;
-                    StockTotal = Convert.ToDouble(Int32.Parse(Result[2].ToString()));
-
-
-                    Double SalesTotal;
                     try
                     {
-                        if (MaxStock < Int32.Parse(Result[2].ToString()) + Int32.Parse(Result[3].ToString()))
-                            MaxStock = Int32.Parse(Result[2].ToString()) + Int32.Parse(Result[3].ToString());
-                        if (DBNull.Value != Result[4])
-                        {
-                            if (MaxSales < Int32.Parse(Result[4].ToString()))
-                                MaxSales = Int32.Parse(Result[4].ToString());
-                        }
-
+                        BottomAxis.AbsoluteMinimum =
+                            Convert.ToDouble(DateTime.Parse((QueryDict[0] as ArrayList)[1].ToString()).ToOADate());
+                        BottomAxis.Minimum = Convert.ToDouble(DateTime.Parse((QueryDict[0] as ArrayList)[1].ToString())
+                            .ToOADate());
                     }
                     catch (Exception)
                     {
-
+                        BottomAxis.AbsoluteMinimum = Convert.ToDouble(startDate);
+                        BottomAxis.Minimum = Convert.ToDouble(startDate);
                     }
-                    if (Result[4] == System.DBNull.Value) SalesTotal = Convert.ToDouble(0);
-                    else SalesTotal = Convert.ToDouble(Int32.Parse(Result[4].ToString()));
 
-                    
-                    var Date = Convert.ToDouble(DateTime.Parse(Result[1].ToString()).ToOADate());
-                    var StockHistoryPoint = new DataPoint(Date, StockTotal);
-                    var SaleHistoryPoint = new DataPoint(Date, SalesTotal);
-                    var StockHistoryPoint2 = new DataPoint(Date, 0);
-                    SalesHistoryPoints.Add(SaleHistoryPoint);
-                    StockHistoryPoints.Add(StockHistoryPoint);
+                    foreach (ArrayList Result in QueryDict)
+                    {
+                        Double StockTotal;
+                        StockTotal = Convert.ToDouble(Int32.Parse(Result[2].ToString()));
 
-                    SalesHistoryPoints2.Add(StockHistoryPoint2);
-                    StockHistoryPoints2.Add(StockHistoryPoint2);
+
+                        Double SalesTotal;
+                        try
+                        {
+                            if (MaxStock < Int32.Parse(Result[2].ToString()) + Int32.Parse(Result[3].ToString()))
+                                MaxStock = Int32.Parse(Result[2].ToString()) + Int32.Parse(Result[3].ToString());
+                            if (DBNull.Value != Result[4])
+                            {
+                                if (MaxSales < Int32.Parse(Result[4].ToString()))
+                                    MaxSales = Int32.Parse(Result[4].ToString());
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                        if (Result[4] == System.DBNull.Value) SalesTotal = Convert.ToDouble(0);
+                        else SalesTotal = Convert.ToDouble(Int32.Parse(Result[4].ToString()));
+
+
+                        var Date = Convert.ToDouble(DateTime.Parse(Result[1].ToString()).ToOADate());
+                        var StockHistoryPoint = new DataPoint(Date, StockTotal);
+                        var SaleHistoryPoint = new DataPoint(Date, SalesTotal);
+                        var StockHistoryPoint2 = new DataPoint(Date, 0);
+                        SalesHistoryPoints.Add(SaleHistoryPoint);
+                        StockHistoryPoints.Add(StockHistoryPoint);
+
+                        SalesHistoryPoints2.Add(StockHistoryPoint2);
+                        StockHistoryPoints2.Add(StockHistoryPoint2);
+                    }
                 }
+                else
+                {
+                    var QueryDict2 = MSSQLPublic.SelectData("SELECT StockLevel,StockMinimum,StockDate from whldata.stock_history WHERE sku="+Sku.ShortSku+"';") as ArrayList;
+                    foreach (ArrayList result in QueryDict2)
+                    {
+                        if (MaxStock < Int32.Parse(result[0].ToString()) + Int32.Parse(result[1].ToString()))
+                            MaxStock = Int32.Parse(result[0].ToString()) + Int32.Parse(result[1].ToString());
+                        Double StockTotal;
+                        StockTotal = Convert.ToDouble(Int32.Parse(result[0].ToString()));
+                        var Date = Convert.ToDouble(DateTime.Parse(result[2].ToString()).ToOADate());
+                        var StockHistoryPoint = new DataPoint(Date, StockTotal);
+                        var StockHistoryPoint2 = new DataPoint(Date, 0);
+                        StockHistoryPoints.Add(StockHistoryPoint);
+                        StockHistoryPoints2.Add(StockHistoryPoint2);
+                    }
 
+                }
                 SalesSeries.Points.AddRange(SalesHistoryPoints);
                 StockSeries.Points.AddRange(StockHistoryPoints);
 
