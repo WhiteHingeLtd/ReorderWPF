@@ -61,6 +61,7 @@
                 foreach (WhlSKU Pack in this.Children)
                 {
                     DataItemDetails newitem = DataItemDetails.NewDataItemDetails(Pack);
+                    if (newitem == null) continue;
                     PacksizeList.Add(newitem);
                 }
                 return PacksizeList;

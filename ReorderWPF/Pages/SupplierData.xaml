@@ -116,15 +116,9 @@
                                 <RowDefinition Height="140*"/>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="1">
-                                <DataGrid x:Name="PacksizeDatagrid" IsReadOnly="True" SelectionMode="Single" Visibility="Visible" >
-                                    <DataGrid.DataContext>
-                                        <local:DataItemDetails/>
-                                    </DataGrid.DataContext>
-                                    <DataGridTextColumn Header="Pack" Binding="{Binding Packsize}" />
-                                    <DataGridTextColumn Header="Sales" Binding="{Binding Sales}" />
-                                    <DataGridTextColumn Header="Weeks" Binding="{Binding WeeksLeft}" />
-                                    <DataGridTextColumn Header="Retail" Binding="{Binding Retail}" />
-                                </DataGrid>
+                                <StackPanel x:Name="PacksizeDataGridPanel" Visibility="Visible" >
+
+                                </StackPanel>
                             </Grid>
                             <Grid Grid.Column="1" Grid.RowSpan="2">
                                 <Grid.RowDefinitions>

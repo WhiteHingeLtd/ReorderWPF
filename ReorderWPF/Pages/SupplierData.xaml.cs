@@ -1,20 +1,22 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using WHLClasses;
-using System.Windows.Controls;
-using System.Windows.Media;
-using ReorderWPF.CustomControls;
-using OxyPlot.Wpf;
-
-namespace ReorderWPF.Pages
+﻿namespace ReorderWPF.Pages
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using OxyPlot.Wpf;
+    using ReorderWPF.CustomControls;
+    using ReorderWPF.UserControls;
+
+    using WHLClasses;
+
     /// <summary>
     /// Interaction logic for SupplierData.xaml
     /// </summary>
@@ -98,8 +100,7 @@ namespace ReorderWPF.Pages
                     return;
                 }
                 if (sku.GetPrimarySupplier().Name != _currentSupplier.Code && LoadPrimaryOnly) return;
-                
-                
+
                 var newItem = DataItem.DataItemNew(sku);
                 
                 SupplierDataBag.Add(newItem);
@@ -125,8 +126,10 @@ namespace ReorderWPF.Pages
         {
             try
             {
+               
                 if (LowStockCheck.IsChecked == true) LoadLowStock = true;
                 else LoadLowStock = false;
+
                 if (SupplierLowCheck.IsChecked == true) LoadSupplierLow = true;
                 else LoadSupplierLow = false;
                 if (DiscontCheck.IsChecked == true) LoadDiscontinued = true;
@@ -169,6 +172,7 @@ namespace ReorderWPF.Pages
                 CurrentSelectedItem = e.Row.Item as DataItem;
                 var asd = e.DetailsElement as Grid;
                 var asd1 = FindVisualChild<DataGrid>(asd);
+                var packsize = FindVisualChild<StackPanel>(asd);
                 var DeliveryNoteBox = FindVisualChild<TextBox>(asd);
 
                 var Model1 = FindVisualChild<PlotView>(asd);
@@ -185,20 +189,16 @@ namespace ReorderWPF.Pages
                 }
                 
                 CurrentSelectedPacksizes.Clear();
-                foreach (DataItemDetails Pack in (e.Row.Item as DataItem).Packsizes)
-                {
-                    CurrentSelectedPacksizes.Add(Pack);
-                }
+                packsize.Children.Add(new Packsizes(CurrentSelectedItem.Children, CurrentSelectedItem));
 
-
-
-                
+                // foreach (DataItemDetails Pack in (e.Row.Item as DataItem).Packsizes)
+                // {
+                //    CurrentSelectedPacksizes.Add(Pack);
+                // }
             }
-
         }
 
-        public static childItem FindVisualChild<childItem>(DependencyObject obj)
-            where childItem : DependencyObject
+        public static childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
             {
@@ -226,20 +226,6 @@ namespace ReorderWPF.Pages
             T parent = ParentObject as T;
             if (parent != null) return parent;
             else return FindParent<T>(ParentObject); //Intentional Recursive method
-        }
-
-        public static T FindParentByName<T>(DependencyObject child, string Name) where T : DependencyObject
-        {
-            //get parent item
-            var parentObject = VisualTreeHelper.GetParent(child);
-
-            //we've reached the end of the tree
-            if (parentObject == null) return null;
-
-            //check if the parent matches the type we're looking for
-            T parent = parentObject as T;
-            if (parent != null) return parent;
-            else return FindParent<T>(parentObject); //Intentional Recursive method
         }
 
         public TextBlock SelectSiblingTextBlockByName(DependencyObject Sibling, string Name)
