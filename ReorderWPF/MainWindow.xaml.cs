@@ -140,6 +140,10 @@ namespace ReorderWPF
             DataSkusMixDown = DataSkus.MakeMixdown();
         }
 
+        private void RibbonButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            NewTab(new OrdersByDate());
+        }
     }
 
     public class SupplierOrderData

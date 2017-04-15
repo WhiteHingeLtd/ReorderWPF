@@ -276,5 +276,11 @@ namespace ReorderWPF.Pages
             CurrentSelectedItem.SkuData.DeliveryNote = tBox.Text;
             CurrentSelectedItem.SkuData.SetDeliveryNote(tBox.Text, MainWindowRef.User_Employee.AuthenticatedUser);
         }
+
+        private void AddToOrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            var OrderQuantityGrid = VisualTreeHelper.GetParent(sender as Button);
+            var tBox = FindVisualChild<TextBox>(OrderQuantityGrid);
+        }
     }
 }

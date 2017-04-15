@@ -164,7 +164,7 @@
                                         <ColumnDefinition Width="103*"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBox x:Name="AmountToOrderBox" Margin="10,23" TextWrapping="Wrap" FontSize="16"/>
-                                    <Button Content="Add to Order" Grid.Column="1" Margin="10,10,7,10"/>
+                                    <Button x:Name="AddToOrderButton" Content="Add to Order" Grid.Column="1" Margin="10,10,7,10" Click="AddToOrderButton_Click"/>
                                 </Grid>
                             </Grid>
                         </Grid>

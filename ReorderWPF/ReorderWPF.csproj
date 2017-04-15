@@ -118,6 +118,9 @@
       <DependentUpon>ItemChart.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ItemChartActual.cs" />
+    <Compile Include="Pages\OrdersByDate.xaml.cs">
+      <DependentUpon>OrdersByDate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SupplierDashboard.xaml.cs">
       <DependentUpon>SupplierDashboard.xaml</DependentUpon>
     </Compile>
@@ -157,6 +160,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\ItemChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\OrdersByDate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
