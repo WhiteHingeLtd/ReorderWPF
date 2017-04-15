@@ -56,7 +56,7 @@ namespace ReorderWPF
             Worker.ReportProgress(0,"Making Mixdown");
             HomeRef.DataSkusMixDown = HomeRef.DataSkus.MakeMixdown();
             Worker.ReportProgress(0, "Loading Employee Data");
-            HomeRef.Data_Employees = new EmployeeCollection();
+            HomeRef.DataEmployees = new EmployeeCollection();
             Worker.ReportProgress(0, "Loading Supplier Collection");
             HomeRef.SupplierCollection = new SupplierCollection();
             HomeRef.SupplierCollection.SortItemsBySupplier(null,null,HomeRef.DataSkus);
@@ -67,7 +67,7 @@ namespace ReorderWPF
             }
             Thread.Sleep(20);
             Worker.ReportProgress(0, "Preparing Authentication");
-            HomeRef.User_Employee = new AuthClass();
+            HomeRef.UserEmployee = new AuthClass();
 
 
         }
@@ -87,12 +87,12 @@ namespace ReorderWPF
             UpdateText("Requesting User Login");
             try
             {
-                UpdateText("Logged in: " + HomeRef.User_Employee.AuthenticatedUser.FullName);
+                UpdateText("Logged in: " + HomeRef.UserEmployee.AuthenticatedUser.FullName);
             }
             catch (NullReferenceException)
             {
-                HomeRef.User_Employee = new AuthClass();
-                UpdateText("Logged in: " + HomeRef.User_Employee.AuthenticatedUser.FullName);
+                HomeRef.UserEmployee = new AuthClass();
+                UpdateText("Logged in: " + HomeRef.UserEmployee.AuthenticatedUser.FullName);
             }
             finally
             {

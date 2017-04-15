@@ -1,27 +1,38 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using WHLClasses;
-using OxyPlot;
-using OxyPlot.Axes;
-using LineSeries = OxyPlot.Series.LineSeries;
-
-namespace ReorderWPF.Pages
+﻿namespace ReorderWPF.Pages
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using WHLClasses;
+    using OxyPlot;
+    using OxyPlot.Axes;
+    using LineSeries = OxyPlot.Series.LineSeries;
     public class DataItem
     {
         public string Sku { get; set; }
+
         public string ItemName { get; set; }
+
         public double WeeksRemaining { get; set; }
+
         public string SupplierCode { get; set; }
+
         public int AverageSales { get; set; }
+
         public int StockLevel { get; set; }
+
         public int RecommendedToOrder { get; set; }
+
         public int InnerCarton { get; set; }
+
         public int OuterCarton { get; set; }
+
         public int NumOnOrder { get; set; }
+
         public float NetOrderPrice { get; set; }
+
         public WhlSKU SkuData { get; set; }
+
         public PlotModel SalesGraph { get; set; }
 
         public string Locations
@@ -29,7 +40,7 @@ namespace ReorderWPF.Pages
             get
             {
                 var returnstring = "Locations :";
-                foreach(SKULocation loc in SkuData.Locations)
+                foreach (var loc in SkuData.Locations)
                 {
                     returnstring += loc.LocationText + ", ";
                 }
@@ -41,52 +52,6 @@ namespace ReorderWPF.Pages
         }
 
         public SkuCollection Children => SupplierData.SupplierSkuCollectionFull.GatherChildren(SkuData.ShortSku);
-
-        public static DataItem DataItemNew(WhlSKU sku)
-        {
-            var NewItem = new DataItem();
-            NewItem.ItemName = sku.Title.Invoice;
-            NewItem.Sku = sku.ShortSku;
-            NewItem.SkuData = sku;
-            NewItem.StockLevel = sku.Stock.Level;
-            NewItem.SkuData = sku;
-            
-            try
-            {
-                foreach (WhlSKU Child in NewItem.Children)
-                {
-                    NewItem.AverageSales += Int32.Parse(Child.SalesData.WeightedAverage.ToString()) * Child.PackSize;
-                }        
-            }
-            catch (Exception)
-            {
-                NewItem.AverageSales = 0;
-            }
-            if (NewItem.AverageSales != 0)
-            {
-                NewItem.WeeksRemaining = Math.Round(Convert.ToDouble(NewItem.StockLevel / NewItem.AverageSales),1);
-            }
-            else
-            {
-                NewItem.WeeksRemaining = 999;
-            }
-           
-            foreach (SKUSupplier supp in sku.Suppliers)
-            {
-                if (!supp.Primary) continue;
-                NewItem.SupplierCode = supp.ReOrderCode;
-            }
-            try
-            {
-                NewItem.SalesGraph = LoadChartData(sku);
-            }
-            catch (NullReferenceException e)
-            {
-                Console.WriteLine(e);
-            }
-            
-            return NewItem;
-        }
 
         public List<DataItemDetails> Packsizes
         {
@@ -100,42 +65,95 @@ namespace ReorderWPF.Pages
                 }
                 return PacksizeList;
             }
-            
+
         }
-        public static PlotModel LoadChartData(WhlSKU Sku)
+
+        public static DataItem DataItemNew(WhlSKU sku)
         {
-            if (Sku != null)
+            var newItem = new DataItem
+                              {
+                                  ItemName = sku.Title.Invoice,
+                                  Sku = sku.ShortSku,
+                                  SkuData = sku,
+                                  StockLevel = sku.Stock.Level
+                              };        
+            try
+            {
+                foreach (var child in newItem.Children)
+                {
+                    newItem.AverageSales += int.Parse(child.SalesData.WeightedAverage.ToString()) * child.PackSize;
+                }        
+            }
+            catch (Exception)
+            {
+                newItem.AverageSales = 0;
+            }
+            if (newItem.AverageSales != 0)
+            {
+                newItem.WeeksRemaining = Math.Round(Convert.ToDouble(newItem.StockLevel / newItem.AverageSales),1);
+            }
+            else
+            {
+                newItem.WeeksRemaining = 999;
+            }
+           
+            foreach (SKUSupplier supp in sku.Suppliers)
+            {
+                if (!supp.Primary)
+                {
+                    continue;
+                }
+
+                newItem.SupplierCode = supp.ReOrderCode;
+            }
+            try
+            {
+                newItem.SalesGraph = LoadChartData(sku);
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e);
+            }
+            
+            return newItem;
+        }
+
+
+        public static PlotModel LoadChartData(WhlSKU paraSku)
+        {
+            if (paraSku != null)
             {
 
-                PlotModel PlotArea = new PlotModel();
+                var plotArea = new PlotModel();
                 var endDate = DateTime.Now.ToOADate();
                 var startDate = DateTime.Now.AddMonths(-6).ToOADate();
-                var BottomAxis = new OxyPlot.Axes.DateTimeAxis
-                {
-                    Position = AxisPosition.Bottom,
-                    Maximum = Convert.ToDouble(endDate),
-                    AbsoluteMaximum = Convert.ToDouble(endDate),
-                    Title = "Date",
-                    StringFormat = "dd/M",
-                    MinorIntervalType = DateTimeIntervalType.Days
-                };
+                var bottomAxis =
+                    new OxyPlot.Axes.DateTimeAxis
+                        {
+                            Position = AxisPosition.Bottom,
+                            Maximum = Convert.ToDouble(endDate),
+                            AbsoluteMaximum = Convert.ToDouble(endDate),
+                            Title = "Date",
+                            StringFormat = "dd/M",
+                            MinorIntervalType = DateTimeIntervalType.Days
+                        };
 
 
                 var leftAxis = new OxyPlot.Axes.LinearAxis
-                {
-                    Position = AxisPosition.Left,
-                    Minimum = 0,
-                    AbsoluteMinimum = 0,
-                    Title = "Sales"
-                };
+                                   {
+                                       Position = AxisPosition.Left,
+                                       Minimum = 0,
+                                       AbsoluteMinimum = 0,
+                                       Title = "Sales"
+                                   };
                 var rightAxis = new OxyPlot.Axes.LinearAxis
-                {
-                    Position = AxisPosition.Right,
-                    Minimum = 0,
-                    AbsoluteMinimum = 0,
-                    Maximum = 5000,
-                    Title = "Stock"
-                };
+                                    {
+                                        Position = AxisPosition.Right,
+                                        Minimum = 0,
+                                        AbsoluteMinimum = 0,
+                                        Maximum = 5000,
+                                        Title = "Stock"
+                                    };
 
 
                 var query = @"SELECT a.shortSku, a.stockDate, a.Stocklevel, a.StockMinimum, b.maintotal 
@@ -143,59 +161,65 @@ namespace ReorderWPF.Pages
                             LEFT JOIN(SELECT top (999999999999) a.orderdate, a.shortsku, sum(a.total)as ""maintotal"" FROM
                             (SELECT top (999999999999) orderdate, sku, SUBSTRING(sku, 0, 8) as ""shortsku"", sum(salequantity) as ""sales"", CAST(SUBSTRING(sku, 8, 4) as /*unsigned*/ int) as ""packsize"", sum(salequantity * CAST(SUBSTRING(sku, 8, 4) as /*unsigned*/ int)) as 'total'
                              FROM whldata.newsales_raw
-                             WHERE sku LIKE '" + Sku.ShortSku + @"%'
+                             WHERE sku LIKE '" + paraSku.ShortSku + @"%'
                              group by sku, orderDate
                              order by orderdate) as a
                             GROUP BY orderdate, shortsku
                             ORDER BY orderDate) as b
                             on b.shortsku = SUBSTRING(a.shortSku, 0, 8) AND b.orderDate = a.stockDate
-                            WHERE a.shortsku = '" + Sku.SKU + @"'
+                            WHERE a.shortsku = '" + paraSku.SKU + @"'
                             ORDER BY StockDate ASC";
-                var QueryDict = MSSQLPublic.SelectData(query) as ArrayList;
-                if (QueryDict == null) throw new NullReferenceException();
-                List<DataPoint> StockHistoryPoints = new List<DataPoint>();
-                List<DataPoint> SalesHistoryPoints = new List<DataPoint>();
-                List<DataPoint> StockHistoryPoints2 = new List<DataPoint>();
-                List<DataPoint> SalesHistoryPoints2 = new List<DataPoint>();
+                var queryDict = MSSQLPublic.SelectData(query) as ArrayList;
+                if (queryDict == null)
+                {
+                    throw new NullReferenceException();
+                }
+
+                var stockHistoryPoints = new List<DataPoint>();
+                var salesHistoryPoints = new List<DataPoint>();
+                var stockHistoryFillPoints = new List<DataPoint>();
+                var salesHistoryFillPoints = new List<DataPoint>();
 
 
-                LineSeries SalesSeries = new LineSeries();
-                LineSeries StockSeries = new LineSeries();
+                var salesSeries = new LineSeries();
+                var stockSeries = new LineSeries();
 
-                OxyPlot.Series.AreaSeries StockAreaSeries = new OxyPlot.Series.AreaSeries();
-                OxyPlot.Series.AreaSeries SalesAreaSeries = new OxyPlot.Series.AreaSeries();
-                var MaxStock = 0;
-                var MaxSales = 0;
-                if (QueryDict.Count != 0)
+                OxyPlot.Series.AreaSeries stockAreaSeries = new OxyPlot.Series.AreaSeries();
+                OxyPlot.Series.AreaSeries salesAreaSeries = new OxyPlot.Series.AreaSeries();
+                var maxStock = 0;
+                var maxSales = 0;
+                if (queryDict.Count != 0)
                 {
                     try
                     {
-                        BottomAxis.AbsoluteMinimum =
-                            Convert.ToDouble(DateTime.Parse((QueryDict[0] as ArrayList)[1].ToString()).ToOADate());
-                        BottomAxis.Minimum = Convert.ToDouble(DateTime.Parse((QueryDict[0] as ArrayList)[1].ToString())
-                            .ToOADate());
+                        bottomAxis.AbsoluteMinimum =
+                            Convert.ToDouble(DateTime.Parse((queryDict[0] as ArrayList)[1].ToString()).ToOADate());
+                        bottomAxis.Minimum =
+                            Convert.ToDouble(DateTime.Parse((queryDict[0] as ArrayList)[1].ToString()).ToOADate());
                     }
                     catch (Exception)
                     {
-                        BottomAxis.AbsoluteMinimum = Convert.ToDouble(startDate);
-                        BottomAxis.Minimum = Convert.ToDouble(startDate);
+                        bottomAxis.AbsoluteMinimum = Convert.ToDouble(startDate);
+                        bottomAxis.Minimum = Convert.ToDouble(startDate);
                     }
 
-                    foreach (ArrayList Result in QueryDict)
+                    foreach (ArrayList result in queryDict)
                     {
-                        Double StockTotal;
-                        StockTotal = Convert.ToDouble(Int32.Parse(Result[2].ToString()));
+                        var stockTotal = Convert.ToDouble(int.Parse(result[2].ToString()));
+                        double salesTotal;
 
-
-                        Double SalesTotal;
                         try
                         {
-                            if (MaxStock < Int32.Parse(Result[2].ToString()) + Int32.Parse(Result[3].ToString()))
-                                MaxStock = Int32.Parse(Result[2].ToString()) + Int32.Parse(Result[3].ToString());
-                            if (DBNull.Value != Result[4])
+                            if (maxStock < int.Parse(result[2].ToString()) + int.Parse(result[3].ToString()))
                             {
-                                if (MaxSales < Int32.Parse(Result[4].ToString()))
-                                    MaxSales = Int32.Parse(Result[4].ToString());
+                                maxStock = int.Parse(result[2].ToString()) + int.Parse(result[3].ToString());
+                            }
+                            if (DBNull.Value != result[4])
+                            {
+                                if (maxSales < int.Parse(result[4].ToString()))
+                                {
+                                    maxSales = int.Parse(result[4].ToString());
+                                }
                             }
 
                         }
@@ -203,99 +227,114 @@ namespace ReorderWPF.Pages
                         {
 
                         }
-                        if (Result[4] == System.DBNull.Value) SalesTotal = Convert.ToDouble(0);
-                        else SalesTotal = Convert.ToDouble(Int32.Parse(Result[4].ToString()));
+                        if (result[4] == DBNull.Value)
+                        {
+                            salesTotal = Convert.ToDouble(0);
+                        }
+                        else
+                        {
+                            salesTotal = Convert.ToDouble(int.Parse(result[4].ToString()));
+                        }
 
 
-                        var Date = Convert.ToDouble(DateTime.Parse(Result[1].ToString()).ToOADate());
-                        var StockHistoryPoint = new DataPoint(Date, StockTotal);
-                        var SaleHistoryPoint = new DataPoint(Date, SalesTotal);
-                        var StockHistoryPoint2 = new DataPoint(Date, 0);
-                        SalesHistoryPoints.Add(SaleHistoryPoint);
-                        StockHistoryPoints.Add(StockHistoryPoint);
+                        var date = Convert.ToDouble(DateTime.Parse(result[1].ToString()).ToOADate());
+                        var stockHistoryPoint = new DataPoint(date, stockTotal);
+                        var saleHistoryPoint = new DataPoint(date, salesTotal);
+                        var stockHistoryPoint2 = new DataPoint(date, 0);
+                        salesHistoryPoints.Add(saleHistoryPoint);
+                        stockHistoryPoints.Add(stockHistoryPoint);
 
-                        SalesHistoryPoints2.Add(StockHistoryPoint2);
-                        StockHistoryPoints2.Add(StockHistoryPoint2);
+                        salesHistoryFillPoints.Add(stockHistoryPoint2);
+                        stockHistoryFillPoints.Add(stockHistoryPoint2);
                     }
                 }
                 else
                 {
-                    var QueryDict2 = MSSQLPublic.SelectData("SELECT StockLevel,StockMinimum,StockDate from whldata.stock_history WHERE sku="+Sku.ShortSku+"';") as ArrayList;
-                    foreach (ArrayList result in QueryDict2)
+                    var queryDict2 = MSSQLPublic.SelectData(
+                                         "SELECT StockLevel,StockMinimum,StockDate from whldata.stock_history WHERE sku="
+                                         + paraSku.ShortSku + "';") as ArrayList;
+                    if (queryDict2 != null)
                     {
-                        if (MaxStock < Int32.Parse(result[0].ToString()) + Int32.Parse(result[1].ToString()))
-                            MaxStock = Int32.Parse(result[0].ToString()) + Int32.Parse(result[1].ToString());
-                        Double StockTotal;
-                        StockTotal = Convert.ToDouble(Int32.Parse(result[0].ToString()));
-                        var Date = Convert.ToDouble(DateTime.Parse(result[2].ToString()).ToOADate());
-                        var StockHistoryPoint = new DataPoint(Date, StockTotal);
-                        var StockHistoryPoint2 = new DataPoint(Date, 0);
-                        StockHistoryPoints.Add(StockHistoryPoint);
-                        StockHistoryPoints2.Add(StockHistoryPoint2);
-                    }
+                        foreach (ArrayList result in queryDict2)
+                        {
+                            if (maxStock < int.Parse(result[0].ToString()) + int.Parse(result[1].ToString()))
+                            {
+                                maxStock = int.Parse(result[0].ToString()) + int.Parse(result[1].ToString());
+                            }
 
+                            var stockLevel = Convert.ToDouble(int.Parse(result[0].ToString()));
+                            var date = Convert.ToDouble(DateTime.Parse(result[2].ToString()).ToOADate());
+                            var stockHistoryPoint = new DataPoint(date, stockLevel);
+                            var stockHistoryPoint2 = new DataPoint(date, 0);
+                            stockHistoryPoints.Add(stockHistoryPoint);
+                            stockHistoryFillPoints.Add(stockHistoryPoint2);
+                        }
+                    }
                 }
-                SalesSeries.Points.AddRange(SalesHistoryPoints);
-                StockSeries.Points.AddRange(StockHistoryPoints);
+
+                salesSeries.Points.AddRange(salesHistoryPoints);
+                stockSeries.Points.AddRange(stockHistoryPoints);
 
 
                 rightAxis.Key = "StockKey";
-                SalesSeries.YAxisKey = leftAxis.Key;
-                SalesSeries.CanTrackerInterpolatePoints = false;
-                SalesSeries.Color = OxyColor.FromRgb(237, 125, 49);
-                SalesSeries.Title = "Sales History";
-                StockSeries.YAxisKey = rightAxis.Key;
-                StockSeries.CanTrackerInterpolatePoints = false;
+                salesSeries.YAxisKey = leftAxis.Key;
+                salesSeries.CanTrackerInterpolatePoints = false;
+                salesSeries.Color = OxyColor.FromRgb(237, 125, 49);
+                salesSeries.Title = "Sales History";
+                stockSeries.YAxisKey = rightAxis.Key;
+                stockSeries.CanTrackerInterpolatePoints = false;
 
-                StockAreaSeries.Points.AddRange(StockHistoryPoints);
-                StockAreaSeries.YAxisKey = rightAxis.Key;
-                StockAreaSeries.CanTrackerInterpolatePoints = false;
-                StockAreaSeries.Fill = OxyColor.FromRgb(176, 195, 230);
-                StockAreaSeries.Color = OxyColor.FromRgb(138, 167, 218);
-                StockAreaSeries.Color2 = OxyColor.FromRgb(138, 167, 218);
-                StockAreaSeries.Points2.AddRange(StockHistoryPoints2);
-                //StockAreaSeries.ConstantY2 = 0;
-                StockAreaSeries.Title = "Stock History Area";
+                stockAreaSeries.Points.AddRange(stockHistoryPoints);
+                stockAreaSeries.YAxisKey = rightAxis.Key;
+                stockAreaSeries.CanTrackerInterpolatePoints = false;
+                stockAreaSeries.Fill = OxyColor.FromRgb(176, 195, 230);
+                stockAreaSeries.Color = OxyColor.FromRgb(138, 167, 218);
+                stockAreaSeries.Color2 = OxyColor.FromRgb(138, 167, 218);
+                stockAreaSeries.Points2.AddRange(stockHistoryFillPoints);
 
-                SalesAreaSeries.Points.AddRange(SalesHistoryPoints);
-                SalesAreaSeries.CanTrackerInterpolatePoints = false;
-                SalesAreaSeries.Fill = OxyColor.FromArgb(140, 237, 125, 49);
-                SalesAreaSeries.Color = OxyColor.FromArgb(255, 138, 167, 218);
-                SalesAreaSeries.Color2 = OxyColor.FromRgb(138, 167, 218);
-                SalesAreaSeries.Points2.AddRange(StockHistoryPoints2);
-                //StockAreaSeries.ConstantY2 = 0;
-                SalesAreaSeries.Title = "Sales History Area";
+                stockAreaSeries.Title = "Stock History Area";
 
+                salesAreaSeries.Points.AddRange(salesHistoryPoints);
+                salesAreaSeries.CanTrackerInterpolatePoints = false;
+                salesAreaSeries.Fill = OxyColor.FromArgb(140, 237, 125, 49);
+                salesAreaSeries.Color = OxyColor.FromArgb(255, 138, 167, 218);
+                salesAreaSeries.Color2 = OxyColor.FromRgb(138, 167, 218);
+                salesAreaSeries.Points2.AddRange(stockHistoryFillPoints);
 
-                PlotArea.Series.Add(StockAreaSeries);
-                PlotArea.Series.Add(SalesAreaSeries);
+                salesAreaSeries.Title = "Sales History Area";
 
 
-                if (MaxSales == 0)
+                plotArea.Series.Add(stockAreaSeries);
+                plotArea.Series.Add(salesAreaSeries);
+
+
+                if (maxSales == 0)
                 {
                     leftAxis.AbsoluteMaximum = 1;
                     rightAxis.AbsoluteMaximum += 10;
                     leftAxis.Title = "No sales";
                 }
-                if (MaxSales > 0)
+                if (maxSales > 0)
                 {
-                    leftAxis.AbsoluteMaximum = (MaxSales * 1.15) + 10;
-                    leftAxis.Maximum = (MaxSales * 1.1) + 10;
-                    rightAxis.Maximum = MaxStock * 1.1;
-                    rightAxis.AbsoluteMaximum = MaxStock * 1.15;
+                    leftAxis.AbsoluteMaximum = (maxSales * 1.15) + 10;
+                    leftAxis.Maximum = (maxSales * 1.1) + 10;
+                    rightAxis.Maximum = maxStock * 1.1;
+                    rightAxis.AbsoluteMaximum = maxStock * 1.15;
                 }
-                //leftAxis.IsZoomEnabled = false;
-                //leftAxis.AbsoluteMaximum = MaxSales;
-                rightAxis.AbsoluteMaximum = MaxStock;
-                PlotArea.Axes.Add(BottomAxis);
-                PlotArea.Axes.Add(leftAxis);
-                PlotArea.Axes.Add(rightAxis);
 
-                PlotArea.Title = Sku.ShortSku + " Sales/Stock History";
+                rightAxis.AbsoluteMaximum = maxStock;
+                plotArea.Axes.Add(bottomAxis);
+                plotArea.Axes.Add(leftAxis);
+                plotArea.Axes.Add(rightAxis);
 
-                return PlotArea;
+                plotArea.Title = paraSku.ShortSku + " Sales/Stock History";
+
+                return plotArea;
             }
-            else return null;
+            else
+            {
+                return null;
+            }
         }
 
     }

@@ -274,7 +274,7 @@ namespace ReorderWPF.Pages
             var tBox = FindVisualChild<TextBox>(NoteBoxGrid);
             // var NotesToSave = SupplierDataGrid.RowDetailsTemplate.FindName("DeliveryNoteRtf", FindParent<RowDetailsTemplate>(sender as Button)) as TextBox;
             CurrentSelectedItem.SkuData.DeliveryNote = tBox.Text;
-            CurrentSelectedItem.SkuData.SetDeliveryNote(tBox.Text, MainWindowRef.User_Employee.AuthenticatedUser);
+            CurrentSelectedItem.SkuData.SetDeliveryNote(tBox.Text, MainWindowRef.UserEmployee.AuthenticatedUser);
         }
 
         private void AddToOrderButton_Click(object sender, RoutedEventArgs e)

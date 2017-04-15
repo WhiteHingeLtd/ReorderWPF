@@ -24,7 +24,6 @@
 
             </oxy:PlotView>
         </Grid>
-        <Button x:Name="LoadByDate" Content="By Date" HorizontalAlignment="Left" Margin="488,0,0,0" Grid.Row="3" VerticalAlignment="Top" Width="75" Click="LoadByDate_Click"/>
-        <Button x:Name="LoadByTime" Content="By Time" HorizontalAlignment="Left" Margin="248,0,0,0" Grid.Row="3" VerticalAlignment="Top" Width="75" Click="LoadByTime_Click"/>
+        <Button x:Name="LoadByDate" Content="By Time" HorizontalAlignment="Left" Margin="488,0,0,0" Grid.Row="3" VerticalAlignment="Top" Width="75" Click="LoadByDateClick"/>
     </Grid>
 </custom:ThreadedPage>

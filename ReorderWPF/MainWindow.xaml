@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Name="RibbonWindow"
         Width="973" Height="729"
-        x:Class="ReorderWPF.MainWindow" Title="Reorder Assistant" Foreground="#FFC10000" Margin="0" Padding="0,10,0,0" ResizeMode="CanResizeWithGrip" Loaded="Window_Loaded" Initialized="Window_Initialized" Closing="RibbonWindow_Closing" WindowState="Maximized" Icon="icon_410_1.png">
+        x:Class="ReorderWPF.MainWindow" Title="Reorder Assistant" Foreground="#FFC10000" Margin="0" Padding="0,10,0,0" ResizeMode="CanResizeWithGrip" Loaded="WindowLoaded" Initialized="WindowInitialized" Closing="RibbonWindowClosing" WindowState="Maximized" Icon="icon_410_1.png">
 
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
@@ -16,7 +16,7 @@
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu IsEnabled="True">
                     <RibbonApplicationMenuItem Header="Another Options"/>
-                    <RibbonApplicationMenuItem x:Name="RefreshItemDataButton" Header="Reload Item Data" Click="RefreshItemDataButton_Click"></RibbonApplicationMenuItem>
+                    <RibbonApplicationMenuItem x:Name="RefreshItemDataButton" Header="Reload Item Data" Click="RefreshItemDataButtonClick"></RibbonApplicationMenuItem>
                     <RibbonApplicationMenu.AuxiliaryPaneContent>
                         <StackPanel />
                     </RibbonApplicationMenu.AuxiliaryPaneContent>
@@ -27,14 +27,14 @@
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="Home">
                 <RibbonGroup Header="Tools" Margin="0,1" Width="136">
-                    <RibbonButton Content="RibbonButton" Margin="0,0,-49,-23" RenderTransformOrigin="0.405,0.475" Click="RibbonButton_Click" LargeImageSource="Line-Chart-icon.png" SmallImageSource="Line-Chart-icon.png" Height="Auto" Label="Sales Charts"/>
+                    <RibbonButton Content="RibbonButton" Margin="0,0,-49,-23" RenderTransformOrigin="0.405,0.475" Click="ItemChartClick" LargeImageSource="Line-Chart-icon.png" SmallImageSource="Line-Chart-icon.png" Height="Auto" Label="Sales Charts"/>
                     <RibbonButton Content="RibbonButton" HorizontalAlignment="Left" Margin="74,-39,-122,-15" LargeImageSource="icon_410_1.png" SmallImageSource="icon_410_1.png" Height="Auto" Label="Order Mgmt"/>
                 </RibbonGroup>
             </RibbonTab>
             <RibbonTab x:Name="WarehouseTab" Header="Settings">
                 <RibbonGroup Header="Graphing Tools" Margin="0,1" Width="136">
-                    <RibbonButton Content="RibbonButton" Margin="0,0,-49,-23" RenderTransformOrigin="0.405,0.475" Click="RibbonButton_Click" LargeImageSource="Line-Chart-icon.png" SmallImageSource="Line-Chart-icon.png" Height="Auto" Label="Sales Charts"/>
-                    <RibbonButton Content="RibbonButton" HorizontalAlignment="Left" Margin="74,-39,-122,-15" LargeImageSource="icon_410_1.png" SmallImageSource="icon_410_1.png" Height="Auto" Label="OrdersByDate" Click="RibbonButton_Click_1"/>
+                    <RibbonButton Content="RibbonButton" Margin="0,0,-49,-23" RenderTransformOrigin="0.405,0.475" Click="ItemChartClick" LargeImageSource="Line-Chart-icon.png" SmallImageSource="Line-Chart-icon.png" Height="Auto" Label="Sales Charts"/>
+                    <RibbonButton Content="RibbonButton" HorizontalAlignment="Left" Margin="74,-39,-122,-15" LargeImageSource="icon_410_1.png" SmallImageSource="icon_410_1.png" Height="Auto" Label="OrdersByDate" Click="OrdersByDateClick"/>
                 </RibbonGroup>
             </RibbonTab>
             <RibbonTab x:Name="SalesTab" Header="Sales">

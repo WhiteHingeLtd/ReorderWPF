@@ -132,6 +132,8 @@
     <Compile Include="Splash.xaml.cs">
       <DependentUpon>Splash.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SupplierData.cs" />
+    <Compile Include="SupplierOrderData.cs" />
     <Compile Include="UserControls\SupplierControl.xaml.cs">
       <DependentUpon>SupplierControl.xaml</DependentUpon>
     </Compile>
