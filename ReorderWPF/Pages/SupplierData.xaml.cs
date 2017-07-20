@@ -94,7 +94,7 @@
             var SupplierDataBag = new ConcurrentBag<DataItem>();
             Parallel.ForEach(CurrentColl, (sku) =>
             {
-                if (Int32.Parse(sku.SalesData.EightWeekAverage.ToString()) == 0 && LoadNoSales != true)
+                if (int.Parse(sku.SalesData.EightWeekAverage.ToString()) == 0 && LoadNoSales != true)
                 {
                     ListOfUnloadedSkus.Add(sku);
                     return;
