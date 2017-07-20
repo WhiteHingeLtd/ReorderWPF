@@ -170,7 +170,7 @@
                             on b.shortsku = SUBSTRING(a.shortSku, 0, 8) AND b.orderDate = a.stockDate
                             WHERE a.shortsku = '" + paraSku.SKU + @"'
                             ORDER BY StockDate ASC";
-                var queryDict = MSSQLPublic.SelectData(query) as ArrayList;
+                var queryDict = SQLServer.SelectData(query) as ArrayList;
                 if (queryDict == null)
                 {
                     throw new NullReferenceException();
@@ -251,7 +251,7 @@
                 }
                 else
                 {
-                    var queryDict2 = MSSQLPublic.SelectData(
+                    var queryDict2 = SQLServer.SelectData(
                                          "SELECT StockLevel,StockMinimum,StockDate from whldata.stock_history WHERE sku="
                                          + paraSku.ShortSku + "';") as ArrayList;
                     if (queryDict2 != null)

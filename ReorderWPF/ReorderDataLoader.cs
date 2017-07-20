@@ -9,7 +9,7 @@
         public SupplierOrderData LoadSupplierOrderData(Guid orderGuid)
         {
             var returnable = new SupplierOrderData();
-            var orderData = MSSQLPublic.SelectDataDictionary("SELECT * from whldata.reorder_orders WHERE orderguid='" + orderGuid.ToString() + "';");
+            var orderData = SQLServer.MSSelectDataDictionary("SELECT * from whldata.reorder_orders WHERE orderguid='" + orderGuid.ToString() + "';");
             return returnable;
         }
 
@@ -26,8 +26,8 @@
                 throw new NullReferenceException();
             }
 
-                MSSQLPublic.insertUpdate("DELETE FROM whldata.reorder_orders WHERE OrderGUID = '" + currentOrder.OrderGuid.ToString() + "'");
-                MSSQLPublic.insertUpdate(
+            SQLServer.MSInsertUpdate("DELETE FROM whldata.reorder_orders WHERE OrderGUID = '" + currentOrder.OrderGuid.ToString() + "'");
+            SQLServer.MSInsertUpdate(
                     @"INSERT INTO whldata.reorder_orders (OrderGUID, SupplierCode, CustomOrderID, OrderDate, OrderDelivered, OrderInvoiced, LinesOfStock, NetValue, CustomOrderNote, CustomDeliveryNote,OrderState)
                                     VALUES ('" + currentOrder.OrderGuid + "','" + currentOrder.SupplierCode + "','" +
                     currentOrder.OrderId + "','" + currentOrder.OrderDate.ToString() + "','" +

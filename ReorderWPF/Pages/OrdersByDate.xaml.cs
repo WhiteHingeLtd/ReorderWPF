@@ -37,7 +37,7 @@ namespace ReorderWPF.Pages
 
         private void LoadDate(object sender, DoWorkEventArgs e)
         {
-            var queryDict = MSSQLPublic.SelectDataDictionary(@"SELECT 
+            var queryDict = SQLServer.MSSelectDataDictionary(@"SELECT 
             SUBSTRING(a.OrderDateTime, 12, 5) as TimeOrdered,
             Count(a.OrderDateTime) as Orders
             FROM(SELECT Max(OrderDateTime) as OrderDateTime FROM whldata.newsales_raw GROUP BY OrderID) as a
