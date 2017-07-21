@@ -23,7 +23,7 @@ namespace ReorderWPF.Dialogs
 
         public void LoadData(object sender, DoWorkEventArgs e)
         {
-            var query = MSSQLPublic.SelectDataDictionary("SELECT * from whldata.reorder_orderitems WHERE SKU like'" + CurrentSku.ShortSku + "%';");
+            var query = SQLServer.MSSelectDataDictionary("SELECT * from whldata.reorder_orderitems WHERE SKU like'" + CurrentSku.ShortSku + "%';");
             foreach (Dictionary<string, object> result in query)
             {
                 var OrderHistory = SkuOrderHistoryClass.MakeNewClass(result);

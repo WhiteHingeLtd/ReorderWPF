@@ -19,7 +19,7 @@ namespace ReorderWPF
         public ReorderSupplier(Supplier CurrentSupplier, SkuCollection FullSkuCollection)
         {
             LastOrderGuid = Guid.Empty;
-            var Query = MSSQLPublic.SelectDataDictionary("SELECT TOP 1 * from whldata.reorder_supplierdata WHERE SupplierCode='" + CurrentSupplier.Code + "';");
+            var Query = SQLServer.MSSelectDataDictionary("SELECT TOP 1 * from whldata.reorder_supplierdata WHERE SupplierCode='" + CurrentSupplier.Code + "';");
             foreach (Dictionary<string, object> result in Query)
             {
                 Code = result["SupplierCode"].ToString();

@@ -92,7 +92,8 @@
             var Worker = sender as BackgroundWorker;
             var CurrentColl = _supplierSkuCollection.SearchBySuppName(_currentSupplier.Code).ExcludeStatus("Dead");
             var SupplierDataBag = new ConcurrentBag<DataItem>();
-            Parallel.ForEach(CurrentColl, (sku) =>
+            var parallelopts = new ParallelOptions {MaxDegreeOfParallelism = 4};
+            Parallel.ForEach(CurrentColl, parallelopts,(sku) =>
             {
                 if (int.Parse(sku.SalesData.EightWeekAverage.ToString()) == 0 && LoadNoSales != true)
                 {
@@ -171,7 +172,6 @@
             {
                 CurrentSelectedItem = e.Row.Item as DataItem;
                 var asd = e.DetailsElement as Grid;
-                var asd1 = FindVisualChild<DataGrid>(asd);
                 var packsize = FindVisualChild<StackPanel>(asd);
                 var DeliveryNoteBox = FindVisualChild<TextBox>(asd);
 

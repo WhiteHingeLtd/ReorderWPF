@@ -118,8 +118,10 @@
                 {
                     bottomAxis.AbsoluteMinimum =
                         Convert.ToDouble(DateTime.Parse((queryDict[0] as ArrayList)[1].ToString()).ToOADate());
-                    bottomAxis.Minimum = Convert.ToDouble(
-                        DateTime.Parse((queryDict[0] as ArrayList)[1].ToString()).ToOADate());
+                    var arrayList = queryDict[0] as ArrayList;
+                    if (arrayList != null)
+                        bottomAxis.Minimum = Convert.ToDouble(
+                            DateTime.Parse(arrayList[1].ToString()).ToOADate());
                 }
                 catch (Exception)
                 {

@@ -170,7 +170,7 @@
                             on b.shortsku = SUBSTRING(a.shortSku, 0, 8) AND b.orderDate = a.stockDate
                             WHERE a.shortsku = '" + paraSku.SKU + @"'
                             ORDER BY StockDate ASC";
-                var queryDict = SQLServer.SelectData(query) as ArrayList;
+                var queryDict = SQLServer.MSSelectDataDictionary(query);
                 if (queryDict == null)
                 {
                     throw new NullReferenceException();
@@ -194,9 +194,9 @@
                     try
                     {
                         bottomAxis.AbsoluteMinimum =
-                            Convert.ToDouble(DateTime.Parse((queryDict[0] as ArrayList)[1].ToString()).ToOADate());
+                            Convert.ToDouble(DateTime.Parse((queryDict[0])["stockDate"].ToString()).ToOADate());
                         bottomAxis.Minimum =
-                            Convert.ToDouble(DateTime.Parse((queryDict[0] as ArrayList)[1].ToString()).ToOADate());
+                            Convert.ToDouble(DateTime.Parse((queryDict[0])["stockDate"].ToString()).ToOADate());
                     }
                     catch (Exception)
                     {
@@ -204,22 +204,22 @@
                         bottomAxis.Minimum = Convert.ToDouble(startDate);
                     }
 
-                    foreach (ArrayList result in queryDict)
+                    foreach (var result in queryDict)
                     {
-                        var stockTotal = Convert.ToDouble(int.Parse(result[2].ToString()));
+                        var stockTotal = Convert.ToDouble(int.Parse(result["Stocklevel"].ToString()));
                         double salesTotal;
 
                         try
                         {
-                            if (maxStock < int.Parse(result[2].ToString()) + int.Parse(result[3].ToString()))
+                            if (maxStock < int.Parse(result["Stocklevel"].ToString()) + int.Parse(result["StockMinimum"].ToString()))
                             {
-                                maxStock = int.Parse(result[2].ToString()) + int.Parse(result[3].ToString());
+                                maxStock = int.Parse(result["Stocklevel"].ToString()) + int.Parse(result["StockMinimum"].ToString());
                             }
-                            if (DBNull.Value != result[4])
+                            if (DBNull.Value != result["maintotal"])
                             {
-                                if (maxSales < int.Parse(result[4].ToString()))
+                                if (maxSales < int.Parse(result["maintotal"].ToString()))
                                 {
-                                    maxSales = int.Parse(result[4].ToString());
+                                    maxSales = int.Parse(result["maintotal"].ToString());
                                 }
                             }
 
@@ -228,17 +228,10 @@
                         {
 
                         }
-                        if (result[4] == DBNull.Value)
-                        {
-                            salesTotal = Convert.ToDouble(0);
-                        }
-                        else
-                        {
-                            salesTotal = Convert.ToDouble(int.Parse(result[4].ToString()));
-                        }
+                        salesTotal = Convert.ToDouble(result["maintotal"] == DBNull.Value ? 0 : int.Parse(result["maintotal"].ToString()));
 
 
-                        var date = Convert.ToDouble(DateTime.Parse(result[1].ToString()).ToOADate());
+                        var date = Convert.ToDouble(DateTime.Parse(result["stockDate"].ToString()).ToOADate());
                         var stockHistoryPoint = new DataPoint(date, stockTotal);
                         var saleHistoryPoint = new DataPoint(date, salesTotal);
                         var stockHistoryPoint2 = new DataPoint(date, 0);
