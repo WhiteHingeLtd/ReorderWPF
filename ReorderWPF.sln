@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReorderWPF", "ReorderWPF\ReorderWPF.csproj", "{580A326B-C2D1-48F1-A0EA-A16AD705ECE3}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Framework", "..\..\Framework\Framework\Framework.vbproj", "{8A2B93B9-4651-40F3-BBF9-D8FD0474A719}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Framework", "..\Framework\Framework\Framework.vbproj", "{8A2B93B9-4651-40F3-BBF9-D8FD0474A719}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinnworksAPI", "..\..\LinnworksNetSDK\Linnworks\src\net\LinnworksAPI\LinnworksAPI.csproj", "{121D410C-DB32-4245-996F-3B1134B0F181}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinnworksAPI", "..\LinnworksNetSDK\Linnworks\src\net\LinnworksAPI\LinnworksAPI.csproj", "{121D410C-DB32-4245-996F-3B1134B0F181}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

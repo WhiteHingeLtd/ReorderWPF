@@ -244,7 +244,7 @@
                 }
                 else
                 {
-                    var queryDict2 = SQLServer.SelectData(
+                    var queryDict2 = SQLServer.MSSelectData(
                                          "SELECT StockLevel,StockMinimum,StockDate from whldata.stock_history WHERE sku="
                                          + paraSku.ShortSku + "';") as ArrayList;
                     if (queryDict2 != null)

@@ -223,12 +223,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Framework\Framework\Framework.vbproj">
-      <Project>{8a2b93b9-4651-40f3-bbf9-d8fd0474a719}</Project>
-      <Name>Framework</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <SplashScreen Include="splash.png" />
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +242,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Line-Chart-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Framework\Framework\Framework.vbproj">
+      <Project>{8a2b93b9-4651-40f3-bbf9-d8fd0474a719}</Project>
+      <Name>Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
